@@ -1,41 +1,43 @@
-function rotateDisk(oImg) {
+(function() {
+  fabric.Object.prototype.originX = fabric.Object.prototype.originY = 'center';
 
-        // rotate around canvas center
-        cx = canvas.getWidth() / 2,
-        cy = canvas.getHeight() / 2,
+  var canvas = this.__canvas = new fabric.Canvas('canvas', {
+    hoverCursor: 'pointer',
+    selection: false,
+    perPixelTargetFind: true,
+    targetFindTolerance: 5
+  });
 
-        // speed of rotation slows down for further planets
-        duration = (planetIndex + 1) * rotationSpeed,
+  // load sprite with planets
+  fabric.Image.fromURL('images/Hard Disk.png', function(disk) {
 
-        // randomize starting angle to avoid planets starting on one line
-        startAngle = fabric.util.getRandomInt(-180, 0),
-        endAngle = startAngle + 359;
+    disk.originX = disk.originY = 'center';
+	disk.left = disk.top = 300;
+	canvas.add(disk);
+    diskRotate(disk);
+  });
 
+  function diskRotate(oImg) {
+    duration = 1000;
     (function animate() {
 
       fabric.util.animate({
-        startValue: startAngle,
-        endValue: endAngle,
+        startValue: 0,
+        endValue: 360,
         duration: duration,
 
         // linear movement
         easing: function(t, b, c, d) { return c*t/d + b; },
 
         onChange: function(angle) {
-          angle = fabric.util.degreesToRadians(angle);
 
-          var x = cx + radius * Math.cos(angle);
-          var y = cy + radius * Math.sin(angle);
+          oImg.setAngle(angle);
 
-          oImg.set({ left: x, top: y }).setCoords();
-
-          // only render once
-          if (planetIndex === totalPlanets - 1) {
-            canvas.renderAll();
-          }
+          canvas.renderAll();
         },
         onComplete: animate
       });
     })();
   }
-  
+
+})();
