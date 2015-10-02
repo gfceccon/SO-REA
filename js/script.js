@@ -9,16 +9,25 @@
   });
 
   // load sprite with planets
-  fabric.Image.fromURL('images/Hard Disk.png', function(disk) {
-
+  fabric.Image.fromURL('images/hard_disk.png', function(disk) {
     disk.originX = disk.originY = 'center';
-	disk.left = disk.top = 300;
-	canvas.add(disk);
+	  disk.left = disk.top = 300;
+	  canvas.add(disk);
     diskRotate(disk);
   });
 
   function diskRotate(oImg) {
-    duration = 1000;
+    var duration = 10000;
+    
+    $( "#selector" ).slider({
+      min: 5000,
+      max: 15000,
+      value: 10000,
+      slide: function( event, ui ) {
+        $( "duration" ).val( "$" + ui.value );
+      }
+    });
+
     (function animate() {
 
       fabric.util.animate({
