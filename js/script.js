@@ -1,7 +1,7 @@
 (function()
 {
 	fabric.Object.prototype.originX = fabric.Object.prototype.originY = 'center';
-	var rpm = 15;
+	var rpm = 4;
 	var disk;
 	var actuator;
 	var canvas = this.__canvas = new fabric.Canvas('canvas', 
@@ -20,7 +20,7 @@
 		disk.selectable = false;
 		disk.left = disk.top = 300;
 		canvas.add(diskImg);
-		diskAnimation();
+		diskAnimate();
 	});
 
 	fabric.Image.fromURL('images/actuator_arm.png', function(actuatorImg)
@@ -34,8 +34,8 @@
 		canvas.add(actuatorImg);
 		actuatorAnimate();
 	});
-	
-	function diskAnimation()
+
+	function diskAnimate()
 	{
 		fabric.util.animate(
 		{
@@ -50,7 +50,7 @@
 				disk.setAngle(angle);
 				canvas.renderAll();
 			},
-			onComplete: diskAnimation
+			onComplete: diskAnimate
 		});
 	};
 	
@@ -60,7 +60,7 @@
 		{
 			startValue: 60,
 			endValue: 105,
-			duration: 15000 / rpm ,
+			duration: 60000 / rpm ,
 
 			easing: function(t, b, c, d) { if(t > d/2) return c*t/d + b; else return c*(1 - t/d) + b },
 
@@ -75,16 +75,16 @@
 
 	$( "#selector" ).slider(
 	{
-		min: 15,
-		max: 60,
-		value: 15,
-		step: 15,
+		min: 0,
+		max: 32,
+		value: 4,
+		step: 4,
 		slide: function( event, ui )
 		{
 			rpm = ui.value;
 			$("#dur").html("" + rpm);
-			diskAnimation();
-			actuatorAnimate();
+      diskAnimate();
+      actuatorAnimate();
 		}
 	});
 	$("#dur").html("" + rpm);
