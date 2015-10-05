@@ -51,13 +51,13 @@
                     <a href="#" id="begin-button">Hard Disk</a>
                 </li>
                 <li>
-                    <a href="#" id="llf-button">Low Level Formatting</a>
+                    <a href="#" id="llf-button" onclick="hideAll();lowLevelFormatting();">Low Level Formatting</a>
                 </li>
                 <li>
                     <a href="#" id="hlf-button">High Level Formatting</a>
                 </li>
                 <li>
-                    <a href="#" id="about-button">About</a>
+                    <a href="#" id="about-button" onclick="hideAll();about();">About</a>
                 </li>
                 <li>
                     <a href="#" id="credits-button">Credits</a>
@@ -65,7 +65,7 @@
                 <li>
                     Disk rotation speed (RPM):
                     <div id="selector" style="margin:0px 10px;"></div>
-					<div id="dur"></div>
+					<div id="rpm"></div>
                 </li>
             </ul>
 			<div class="languages">
@@ -80,6 +80,8 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
+						<p id="text">
+						</p>
                         <canvas id="canvas" width="800" height="600">
 						</canvas>
                     </div>
