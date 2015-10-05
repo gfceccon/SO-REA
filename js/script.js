@@ -111,7 +111,7 @@ function lowLevelFormatting()
 	if(llSelector == false)
 	{
 		llSelector = $( "#selector" );
-		llRpm = $("#dur");
+		llRpm = $("#rpm");
 		llSelector.slider(
 		{
 			min: 0,
