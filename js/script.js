@@ -43,7 +43,7 @@ function lowLevelFormatting()
 	else
 	{
 		llCanvas.add(disk_case);
-		disk_case.moveTo(0);
+		//disk_case.moveTo(0);
 	}
 
 	if(disk_platter == false)
@@ -64,8 +64,8 @@ function lowLevelFormatting()
 	else
 	{
 		llCanvas.add(disk_platter);
-		disk_platterAnimate();
-		disk_platter.moveTo(1);
+		platterAnimate();
+		//disk_platter.moveTo(1);
 	}
 
 	if(disk_actuator == false)
@@ -86,8 +86,8 @@ function lowLevelFormatting()
 	else
 	{
 		llCanvas.add(disk_actuator);
-		disk_actuatorAnimate();
-		disk_actuator.moveTo(2);
+		actuatorAnimate();
+		//disk_actuator.moveTo(2);
 	}
 
 	function platterAnimate()
@@ -118,8 +118,8 @@ function lowLevelFormatting()
 		{
 			fabric.util.animate(
 			{
-				startValue: 0,
-				endValue: 0,
+				startValue: 37,
+				endValue: -18,
 				duration: 60000 / rpm ,
 
 				easing: function(t, b, c, d) { if(t > d/2) return c*t/d + b; else return c*(1 - t/d) + b },
@@ -142,7 +142,7 @@ function lowLevelFormatting()
 		{
 			min: 0,
 			max: 32,
-			value: 4,
+			value: rpm,
 			step: 4,
 			slide: function( event, ui )
 			{
@@ -168,8 +168,8 @@ function hideAll()
 		$("#canvas").hide();
 		llSelector.hide();
 		llRpm.hide();
-		llCanvas.remove(disk);
-		llCanvas.remove(actuator);
+		llCanvas.remove(disk_platter);
+		llCanvas.remove(disk_actuator);
 	}
 	
 	$("#text").html("");
