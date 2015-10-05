@@ -16,6 +16,8 @@
 	{
 		disk = diskImg;
 		disk.originX = disk.originY = 'center';
+		disk.lockMovementX = disk.lockMovementY = true;
+		disk.selectable = false;
 		disk.left = disk.top = 300;
 		canvas.add(diskImg);
 		diskAnimation();
@@ -25,6 +27,8 @@
 	{
 		actuator = actuatorImg;
 		actuator.originX = actuator.originY = 'center';
+		actuator.lockMovementX = actuator.lockMovementY = true;
+		actuator.selectable = false;
 		actuator.left = 700;
 		actuator.top = 500;
 		canvas.add(actuatorImg);
