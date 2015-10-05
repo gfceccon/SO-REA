@@ -1,6 +1,7 @@
 var llCanvas = false;
-var disk = false;
-var actuator = false;
+var disk_case = false;
+var disk_platter = false;
+var disk_actuator = false;
 var llSelector = false;
 var llRpm = false;
 var stopAnimation = false;
@@ -25,46 +26,71 @@ function lowLevelFormatting()
 		$("#canvas").show();
 	}
 
-	if(disk == false)
+	if(disk_case == false)
 	{
-		fabric.Image.fromURL('images/hard_disk.png', function(diskImg)
+		fabric.Image.fromURL('images/disk_case.png', function(disk_caseImg)
 		{
-			disk = diskImg;
-			disk.originX = disk.originY = 'center';
-			disk.lockMovementX = disk.lockMovementY = true;
-			disk.selectable = false;
-			disk.left = disk.top = 300;
-			llCanvas.add(disk);
-			diskAnimate();
+			disk_case = disk_caseImg;
+			disk_case.originX = disk_case.originY = 'center';
+			disk_case.lockMovementX = disk_case.lockMovementY = true;
+			disk_case.selectable = false;
+			disk_case.left = 400;
+			disk_case.top = 300;
+			llCanvas.add(disk_case);
+			disk_case.moveTo(0);
 		});
 	}
 	else
 	{
-		llCanvas.add(disk);
-		diskAnimate();
+		llCanvas.add(disk_case);
+		disk_case.moveTo(0);
 	}
 
-	if(actuator == false)
+	if(disk_platter == false)
 	{
-		fabric.Image.fromURL('images/actuator_arm.png', function(actuatorImg)
+		fabric.Image.fromURL('images/disk_platter.png', function(disk_platterImg)
 		{
-			actuator = actuatorImg;
-			actuator.originX = actuator.originY = 'center';
-			actuator.lockMovementX = actuator.lockMovementY = true;
-			actuator.selectable = false;
-			actuator.left = 700;
-			actuator.top = 500;
-			llCanvas.add(actuator);
+			disk_platter = disk_platterImg;
+			disk_platter.originX = disk_platter.originY = 'center';
+			disk_platter.lockMovementX = disk_platter.lockMovementY = true;
+			disk_platter.selectable = false;
+			disk_platter.left = 317;
+			disk_platter.top = 300;
+			llCanvas.add(disk_platter);
+			platterAnimate();
+			disk_platter.moveTo(1);
+		});
+	}
+	else
+	{
+		llCanvas.add(disk_platter);
+		disk_platterAnimate();
+		disk_platter.moveTo(1);
+	}
+
+	if(disk_actuator == false)
+	{
+		fabric.Image.fromURL('images/disk_actuator_arm.png', function(disk_actuatorImg)
+		{
+			disk_actuator = disk_actuatorImg;
+			disk_actuator.originX = disk_actuator.originY = 'center';
+			disk_actuator.lockMovementX = disk_actuator.lockMovementY = true;
+			disk_actuator.selectable = false;
+			disk_actuator.left = 610;
+			disk_actuator.top = 350;
+			llCanvas.add(disk_actuator);
 			actuatorAnimate();
+			disk_actuator.moveTo(2);
 		});
 	}
 	else
 	{
-		llCanvas.add(actuator);
-		actuatorAnimate();
+		llCanvas.add(disk_actuator);
+		disk_actuatorAnimate();
+		disk_actuator.moveTo(2);
 	}
 
-	function diskAnimate()
+	function platterAnimate()
 	{
 		if(stopAnimation == false)
 		{
@@ -78,10 +104,10 @@ function lowLevelFormatting()
 
 				onChange: function(angle)
 				{
-					disk.setAngle(angle);
+					disk_platter.setAngle(angle);
 					llCanvas.renderAll();
 				},
-				onComplete: diskAnimate
+				onComplete: platterAnimate
 			});
 		}
 	};
@@ -92,15 +118,15 @@ function lowLevelFormatting()
 		{
 			fabric.util.animate(
 			{
-				startValue: 60,
-				endValue: 105,
+				startValue: 0,
+				endValue: 0,
 				duration: 60000 / rpm ,
 
 				easing: function(t, b, c, d) { if(t > d/2) return c*t/d + b; else return c*(1 - t/d) + b },
 
 				onChange: function(angle)
 				{
-					actuator.setAngle(angle);
+					disk_actuator.setAngle(angle);
 					llCanvas.renderAll();
 				},
 				onComplete: actuatorAnimate
@@ -122,7 +148,7 @@ function lowLevelFormatting()
 			{
 				rpm = ui.value;
 				llRpm.html("" + rpm);
-				diskAnimate();
+				platterAnimate();
 				actuatorAnimate();
 			}
 		});
