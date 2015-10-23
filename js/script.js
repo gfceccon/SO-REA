@@ -86,7 +86,6 @@ function initialize()
 
 function hardDisk()
 {
-	fabric.Object.prototype.originX = fabric.Object.prototype.originY = 'center';
 	stopAnimation = false;
 
 	canvas.insertAt(disk_case, 0, true);
@@ -106,7 +105,6 @@ function hardDisk()
 
 function lowLevelFormatting()
 {
-	fabric.Object.prototype.originX = fabric.Object.prototype.originY = 'center';
 	stopAnimation = false;
 
 	canvas.insertAt(disk_case, 0, true);
@@ -149,8 +147,8 @@ function actuatorAnimate()
 	{
 		fabric.util.animate(
 		{
-			startValue: 37,
-			endValue: -18,
+			startValue: 0,
+			endValue: 55,
 			duration: 60000 / rpm ,
 
 			easing: function(t, b, c, d) { if(t > d/2) return c*t/d + b; else return c*(1 - t/d) + b },
