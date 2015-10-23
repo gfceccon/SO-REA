@@ -69,7 +69,8 @@ function initialize()
 			rpm = ui.value;
 			RpmText.html("Disk rotation speed (RPM): " + rpm);
 			platterAnimate();
-			actuatorAnimate();
+			actuator_angle = 30;
+			disk_actuator.setAngle(30);
 		}
 	});
 	RpmSelector.hide();
@@ -96,7 +97,8 @@ function hardDisk()
 	disk_cover.left = 400;
 
 	platterAnimate();
-	actuatorAnimate();
+	actuator_angle = 30;
+	disk_actuator.setAngle(30);
 
 	$("#canvas").show();
 	RpmText.show();
@@ -112,7 +114,8 @@ function lowLevelFormatting()
 	canvas.insertAt(disk_actuator, 2, true);
 
 	platterAnimate();
-	actuatorAnimate();
+	actuator_angle = 30;
+	disk_actuator.setAngle(30);
 
 	$("#canvas").show();
 	RpmText.show();
@@ -136,31 +139,88 @@ function platterAnimate()
 				disk_platter.setAngle(angle);
 				canvas.renderAll();
 			},
-			onComplete: platterAnimate
+			onComplete: function()
+			{
+				var randTrack = Math.round(Math.random() * 2);
+				actuatorAnimateTo(randTrack);
+				platterAnimate();
+			}
 		});
 	}
 };
+var actuator_velocity = 20;
+var actuator_angle = 30;
+var actuator_moving = false;
 
-function actuatorAnimate()
+// OLD FUNCTION (ZIG-ZAG ANIMATION)
+//function actuatorAnimate()
+//{
+//	if(stopAnimation == false)
+//	{
+//		fabric.util.animate(
+//		{
+//			startValue: 0,
+//			endValue: 55,
+//			duration: 60000 / rpm ,
+//
+//			easing: function(t, b, c, d) { if(t > d/2) return c*t/d + b; else return c*(1 - t/d) + b },
+//
+//			onChange: function(angle)
+//			{
+//				disk_actuator.setAngle(angle);
+//				canvas.renderAll();
+//			},
+//			onComplete: actuatorAnimate
+//		});
+//	}
+//};
+
+function actuatorAnimateTo(track)
 {
+	if(actuator_moving == true)
+		return;
+
+	actuator_moving = true;
+	
+	var angle;
+	if(track == 0)
+		angle = 30;
+	else if(track == 1)
+		angle = 40;
+	else if(track == 2)
+		angle = 55;
+	
+	if(actuator_angle == angle)
+	{
+		actuator_moving = false;
+		return;
+	}
+	
 	if(stopAnimation == false)
 	{
+		var auxiliar = angle;
 		fabric.util.animate(
 		{
-			startValue: 0,
-			endValue: 55,
-			duration: 60000 / rpm ,
+			startValue: actuator_angle,
+			endValue: angle,
+			duration: 1000 * Math.abs(actuator_angle - angle) / actuator_velocity,
 
-			easing: function(t, b, c, d) { if(t > d/2) return c*t/d + b; else return c*(1 - t/d) + b },
+			easing: function(t, b, c, d) { return c*t/d + b; },
 
-			onChange: function(angle)
+			onChange: function(value)
 			{
-				disk_actuator.setAngle(angle);
+				disk_actuator.setAngle(value);
 				canvas.renderAll();
 			},
-			onComplete: actuatorAnimate
+			onComplete: function()
+			{
+				actuator_angle = auxiliar;
+				actuator_moving = false;
+			}
 		});
 	}
+	else
+		actuator_moving = false;
 };
 
 function about()
