@@ -1,6 +1,6 @@
-var llCanvas = false;
-var llSelector = false;
-var llRpm = false;
+var canvas = false;
+var RpmSelector = false;
+var RpmText = false;
 var rpm = 4;
 
 var disk_cover = false;
@@ -14,24 +14,13 @@ initialize();
 
 function initialize()
 {
-	llCanvas = new fabric.Canvas('canvas', 
-	{
-		hoverCursor: 'pointer',
-		selection: false,
-		perPixelTargetFind: true,
-		targetFindTolerance: 5
-	});
-
 	fabric.Image.fromURL('images/disk_cover.png', function(disk_coverImg)
 	{
 		disk_cover = disk_coverImg;
 		disk_cover.originX = disk_cover.originY = 'center';
-		disk_cover.lockMovementX = disk_cover.lockMovementY = true;
-		disk_cover.selectable = false;
+		disk_cover.lockMovementY = true;
 		disk_cover.left = 400;
 		disk_cover.top = 300;
-		llCanvas.add(disk_cover);
-		disk_cover.moveTo(0);
 	});
 
 	fabric.Image.fromURL('images/disk_case.png', function(disk_caseImg)
@@ -42,8 +31,6 @@ function initialize()
 		disk_case.selectable = false;
 		disk_case.left = 400;
 		disk_case.top = 300;
-		llCanvas.add(disk_case);
-		disk_case.moveTo(1);
 	});
 
 	fabric.Image.fromURL('images/disk_platter.png', function(disk_platterImg)
@@ -54,9 +41,6 @@ function initialize()
 		disk_platter.selectable = false;
 		disk_platter.left = 317;
 		disk_platter.top = 300;
-		llCanvas.add(disk_platter);
-		//platterAnimate();
-		disk_platter.moveTo(2);
 	});
 
 	fabric.Image.fromURL('images/disk_actuator_arm.png', function(disk_actuatorImg)
@@ -67,30 +51,37 @@ function initialize()
 		disk_actuator.selectable = false;
 		disk_actuator.left = 610;
 		disk_actuator.top = 350;
-		llCanvas.add(disk_actuator);
-		//actuatorAnimate();
-		disk_actuator.moveTo(3);
 	});
 
-	llSelector = $( "#selector" );
-	llRpm = $("#rpm");
-	llSelector.slider(
+	RpmText = $("#rpm");
+	RpmText.html("Disk rotation speed (RPM): " + rpm);
+	RpmText.hide();
+	
+	RpmSelector = $("#selector");
+	RpmSelector.slider(
 	{
 		min: 0,
 		max: 32,
 		value: rpm,
 		step: 4,
-		slide: function( event, ui )
+		slide: function(event, ui)
 		{
 			rpm = ui.value;
-			llRpm.html("" + rpm);
+			RpmText.html("Disk rotation speed (RPM): " + rpm);
 			platterAnimate();
 			actuatorAnimate();
 		}
 	});
-	llRpm.html("" + rpm);
+	RpmSelector.hide();
 
-	hideAll();
+	canvas = new fabric.Canvas('canvas', 
+	{
+		hoverCursor: 'pointer',
+		selection: false,
+		perPixelTargetFind: true,
+		targetFindTolerance: 5,
+		renderOnAddRemove: false
+	});
 }
 
 function hardDisk()
@@ -98,15 +89,19 @@ function hardDisk()
 	fabric.Object.prototype.originX = fabric.Object.prototype.originY = 'center';
 	stopAnimation = false;
 
-	llCanvas.add(disk_cover);
-	llCanvas.add(disk_case);
-	llCanvas.add(disk_platter);
-	llCanvas.add(disk_actuator);
+	canvas.insertAt(disk_case, 0, true);
+	canvas.insertAt(disk_platter, 1, true);
+	canvas.insertAt(disk_actuator, 2, true);
+	canvas.insertAt(disk_cover, 3, true);
+
+	disk_cover.left = 400;
 
 	platterAnimate();
 	actuatorAnimate();
 
 	$("#canvas").show();
+	RpmText.show();
+	RpmSelector.show();
 }
 
 function lowLevelFormatting()
@@ -114,17 +109,16 @@ function lowLevelFormatting()
 	fabric.Object.prototype.originX = fabric.Object.prototype.originY = 'center';
 	stopAnimation = false;
 
-	llCanvas.add(disk_case);
-	llCanvas.add(disk_platter);
-	llCanvas.add(disk_actuator);
-	
+	canvas.insertAt(disk_case, 0, true);
+	canvas.insertAt(disk_platter, 1, true);
+	canvas.insertAt(disk_actuator, 2, true);
+
 	platterAnimate();
 	actuatorAnimate();
 
 	$("#canvas").show();
-
-	llSelector.show();
-	llRpm.show();
+	RpmText.show();
+	RpmSelector.show();
 }
 
 function platterAnimate()
@@ -142,7 +136,7 @@ function platterAnimate()
 			onChange: function(angle)
 			{
 				disk_platter.setAngle(angle);
-				llCanvas.renderAll();
+				canvas.renderAll();
 			},
 			onComplete: platterAnimate
 		});
@@ -164,7 +158,7 @@ function actuatorAnimate()
 			onChange: function(angle)
 			{
 				disk_actuator.setAngle(angle);
-				llCanvas.renderAll();
+				canvas.renderAll();
 			},
 			onComplete: actuatorAnimate
 		});
@@ -179,11 +173,13 @@ function about()
 function hideAll()
 {
 	$("#canvas").hide();
-	llSelector.hide();
-	llRpm.hide();
-	//llCanvas.remove(disk_cover);
-	//llCanvas.remove(disk_platter);
-	//llCanvas.remove(disk_actuator);
+	RpmText.hide();
+	RpmSelector.hide();
+
+	canvas.remove(disk_cover);
+	canvas.remove(disk_case);
+	canvas.remove(disk_platter);
+	canvas.remove(disk_actuator);
 
 	$("#text").html("");
 	
