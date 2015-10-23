@@ -1,3 +1,36 @@
+var creditsPt = "<p>Créditos:</p>" +
+			"<p>Esta aplicação informativa foi desenvolvida como Recurso Educacional Aberto (REA) dentro da disciplina de Sistemas Operacionais I.<br>" +
+			"Seu desenvolvimento foi supervisionado pelo professor Paulo Sérgio Lopes de Souza, e implementado pelos alunos:</p>" +
+			"<p>Danilo Zecchin Nery<br>" +
+			"Guilherme Zanardo Borduchi<br>" +
+			"Gustavo Ferreira Ceccon<br>" +
+			"Lucas Silveira de Moura</p>" +
+			"<p>Universidade de São Paulo, Institudo de Ciências Matemáticas e de Computação (ICMC - USP).<br>" +
+			"São Carlos - SP, Brasil.<br>" +
+			"Segundo semestre de 2015.</p>";
+var creditsEn = "<p>Credits:</p>" +
+			"<p>This informative application was developed as an Open Educational Resourse (OER), within the discipline of Operational Systems I.<br>" +
+			"Its development was supervised by professor Paulo Sérgio Lopes de Souza, and implemented by the students:</p>" +
+			"<p>Danilo Zecchin Nery<br>" +
+			"Guilherme Zanardo Borduchi<br>" +
+			"Gustavo Ferreira Ceccon<br>" +
+			"Lucas Silveira de Moura</p>" +
+			"<p>University of São Paulo, Institute of Mathematics and Computer Sciences (ICMC - USP).<br>" +
+			"São Carlos - SP, Brasil.<br>" +
+			"Second semester of 2015.</p>";
+
+var Languages = {
+	PtBr : 0, 
+	EnUs : 1
+};
+var lang = Languages.PtBr;
+var Section = {
+	About : 0,
+	Credits : 1,
+	Other : 2,
+};
+var currentSection = Section.Other;
+
 var canvas = false;
 var RpmSelector = false;
 var RpmText = false;
@@ -101,6 +134,8 @@ function hardDisk()
 	$("#canvas").show();
 	RpmText.show();
 	RpmSelector.show();
+
+	currentSection = Section.Other;
 }
 
 function lowLevelFormatting()
@@ -117,6 +152,8 @@ function lowLevelFormatting()
 	$("#canvas").show();
 	RpmText.show();
 	RpmSelector.show();
+
+	currentSection = Section.Other;
 }
 
 function platterAnimate()
@@ -166,6 +203,56 @@ function actuatorAnimate()
 function about()
 {
 	$("#text").html("This is our OER!");
+
+	currentSection = Section.About;
+}
+
+function credits()
+{
+	if(lang == Languages.PtBr)
+	{
+		$("#text").html(creditsPt);
+	}
+	if(lang == Languages.EnUs)
+	{
+		$("#text").html(creditsEn);
+	}
+
+	currentSection = Section.Credits;
+}
+
+function resetLang()
+{
+	switch(currentSection)
+	{
+		case Section.About:
+			hideAll();
+			about();
+			break;
+
+		case Section.Credits:
+			hideAll();
+			credits();
+			break;
+
+		case Section.Other:
+			break;
+
+		default:
+			break;
+	}
+}
+
+function setLangPt()
+{
+	lang = Languages.PtBr;
+	resetLang();
+}
+
+function setLangEn()
+{
+	lang = Languages.EnUs;
+	resetLang();
 }
 
 function hideAll()

@@ -1,32 +1,32 @@
-Portugues:
-
-Créditos:
-
-Esta aplicação informativa foi desenvolvida como Recurso Educacional Aberto (REA) dentro da disciplina de Sistemas Operacionais I.
-Seu desenvolvimento foi supervisionado pelo professor Paulo Sérgio Lopes de Souza, e implementado pelos alunos:
-
-Danilo Zecchin Nery
-Guilherme Zanardo Borduchi
-Gustavo Ferreira Ceccon
-Lucas Silveira de Moura
-
-Universidade de São Paulo, Institudo de Ciências Matemáticas e de Computação (ICMC - USP).
-São Carlos - SP, Brasil.
-Segundo semestre de 2015.
-
-
-Ingles:
-
-Credits:
-
-This informative application was developed as an Open Educational Resourse (OER), within the discipline of Operational Systems I.
-Its development was supervised by professor Paulo Sérgio Lopes de Souza, and implemented by the students:
-
-Danilo Zecchin Nery
-Guilherme Zanardo Borduchi
-Gustavo Ferreira Ceccon
-Lucas Silveira de Moura
-
-University of São Paulo, Institute of Mathematics and Computer Sciences (ICMC - USP).
-São Carlos - SP, Brasil.
-Second semester of 2015.
+<p>Portugues:</p>
+<p></p>
+<p>Créditos:</p>
+<p></p>
+<p>Esta aplicação informativa foi desenvolvida como Recurso Educacional Aberto (REA) dentro da disciplina de Sistemas Operacionais I.</p>
+<p>Seu desenvolvimento foi supervisionado pelo professor Paulo Sérgio Lopes de Souza, e implementado pelos alunos:</p>
+<p></p>
+<p>Danilo Zecchin Nery</p>
+<p>Guilherme Zanardo Borduchi</p>
+<p>Gustavo Ferreira Ceccon</p>
+<p>Lucas Silveira de Moura</p>
+<p></p>
+<p>Universidade de São Paulo, Institudo de Ciências Matemáticas e de Computação (ICMC - USP).</p>
+<p>São Carlos - SP, Brasil.</p>
+<p>Segundo semestre de 2015.</p>
+<p></p>
+<p></p>
+<p>Ingles:</p>
+<p></p>
+<p>Credits:</p>
+<p></p>
+<p>This informative application was developed as an Open Educational Resourse (OER), within the discipline of Operational Systems I.</p>
+<p>Its development was supervised by professor Paulo Sérgio Lopes de Souza, and implemented by the students:</p>
+<p></p>
+<p>Danilo Zecchin Nery</p>
+<p>Guilherme Zanardo Borduchi</p>
+<p>Gustavo Ferreira Ceccon</p>
+<p>Lucas Silveira de Moura</p>
+<p></p>
+<p>University of São Paulo, Institute of Mathematics and Computer Sciences (ICMC - USP).</p>
+<p>São Carlos - SP, Brasil.</p>
+<p>Second semester of 2015.</p>

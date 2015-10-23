@@ -60,7 +60,7 @@
                     <a href="#" id="about-button" onclick="hideAll();about();">About</a>
                 </li>
                 <li>
-                    <a href="#" id="credits-button">Credits</a>
+                    <a href="#" id="credits-button" onclick="hideAll();credits();">Credits</a>
                 </li>
                 <li>
                     <div id="rpm"></div>
@@ -68,8 +68,10 @@
                 </li>
             </ul>
 			<div class="languages">
-				<a href="#"><image src="images/br.png" id="br" class="flag"></a>
-				<a href="#"><image src="images/us.png" id="us" class="flag"></a>
+				<a href="#"><image src="images/br.png" id="br" class="flag" onclick="setLangPt();"></a>
+                <a href="#"><image src="images/us.png" id="us" class="flag" onclick="setLangEn();"></a>
+                <!-- <a href="#"><image src="images/br.png" id="br" class="flag"></a> -->
+                <!-- <a href="#"><image src="images/us.png" id="us" class="flag"></a> -->
 			</div>
         </div>
         <!-- /#sidebar-wrapper -->
