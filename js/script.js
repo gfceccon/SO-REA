@@ -1,12 +1,15 @@
 var canvas = false;
+
 var RpmSelector = false;
 var RpmText = false;
-var rpm = 4;
+var rpm = 16;
 
 var disk_cover = false;
 var disk_case = false;
 var disk_platter = false;
 var disk_actuator = false;
+
+var paragraph;
 
 var stopAnimation = false;
 
@@ -68,12 +71,18 @@ function initialize()
 		{
 			rpm = ui.value;
 			RpmText.html("Disk rotation speed (RPM): " + rpm);
-			platterAnimate();
 			actuator_angle = 30;
 			disk_actuator.setAngle(30);
+		},
+		stop: function(event, ui)
+		{
+			console.log("stop");
+			platterAnimate();
 		}
 	});
 	RpmSelector.hide();
+	
+	paragraph = $("#subtitle");
 
 	canvas = new fabric.Canvas('canvas', 
 	{
@@ -122,9 +131,15 @@ function lowLevelFormatting()
 	RpmSelector.show();
 }
 
+var reading = true;
+var current_track = 0;
+var skew = 0;
+var platter_angle = 0;
+var platter_division = 8;
+
 function platterAnimate()
 {
-	if(stopAnimation == false)
+	if(stopAnimation == false || rpm > 0) 
 	{
 		fabric.util.animate(
 		{
@@ -136,44 +151,34 @@ function platterAnimate()
 
 			onChange: function(angle)
 			{
+				platter_angle = angle;
 				disk_platter.setAngle(angle);
 				canvas.renderAll();
 			},
 			onComplete: function()
 			{
-				var randTrack = Math.round(Math.random() * 2);
-				actuatorAnimateTo(randTrack);
+				console.log("asd");
+				if(reading == true)
+				{
+					var randTrack = Math.round(Math.random() * 2);
+					actuatorAnimateTo(randTrack);
+					reading = false;
+					paragraph.append("End reading " + current_track + '\n');
+				}
+				else
+				{
+					reading = true;
+					paragraph.append("Begin reading " + current_track + '\n');
+				}
 				platterAnimate();
 			}
 		});
 	}
 };
+
 var actuator_velocity = 20;
 var actuator_angle = 30;
 var actuator_moving = false;
-
-// OLD FUNCTION (ZIG-ZAG ANIMATION)
-//function actuatorAnimate()
-//{
-//	if(stopAnimation == false)
-//	{
-//		fabric.util.animate(
-//		{
-//			startValue: 0,
-//			endValue: 55,
-//			duration: 60000 / rpm ,
-//
-//			easing: function(t, b, c, d) { if(t > d/2) return c*t/d + b; else return c*(1 - t/d) + b },
-//
-//			onChange: function(angle)
-//			{
-//				disk_actuator.setAngle(angle);
-//				canvas.renderAll();
-//			},
-//			onComplete: actuatorAnimate
-//		});
-//	}
-//};
 
 function actuatorAnimateTo(track)
 {
@@ -214,8 +219,14 @@ function actuatorAnimateTo(track)
 			},
 			onComplete: function()
 			{
+				if(platter_angle <= skew * track * 360 / platter_division)
+				{
+					reading = true;
+					paragraph.append("Begin reading " + current_track + '\n');
+				}
 				actuator_angle = auxiliar;
 				actuator_moving = false;
+				current_track = track;
 			}
 		});
 	}
