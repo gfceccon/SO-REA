@@ -48,7 +48,7 @@
                     <a href="#" id="begin-button">Begin</a>
                 </li>
                 <li>
-                    <a href="#" id="begin-button">Hard Disk</a>
+                    <a href="#" id="hd-button" onclick="hideAll();hardDisk();">Hard Disk</a>
                 </li>
                 <li>
                     <a href="#" id="llf-button" onclick="hideAll();lowLevelFormatting();">Low Level Formatting</a>
@@ -63,9 +63,8 @@
                     <a href="#" id="credits-button">Credits</a>
                 </li>
                 <li>
-                    Disk rotation speed (RPM):
+                    <div id="rpm"></div>
                     <div id="selector" style="margin:0px 10px;"></div>
-					<div id="rpm"></div>
                 </li>
             </ul>
 			<div class="languages">
