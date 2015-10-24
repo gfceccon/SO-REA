@@ -1,28 +1,28 @@
-var titlePt = "Formatação de Disco"
-var titleEn = "Disk Formatting"
+var title_pt = "Formatação de Disco";
+var title_en = "Disk Formatting";
 
-var beginPt = "Iniciar"
-var beginEn = "Begin"
+var begin_pt = "Iniciar";
+var begin_en = "Begin";
 
-var hdPt = "Disco Rígido"
-var hdEn = "Hard Disk"
+var hd_pt = "Disco Rígido";
+var hd_en = "Hard Disk";
 
-var llfPt = "Formatação de Baixo Nível"
-var llfEn = "Low Level Formatting"
+var llf_pt = "Formatação de Baixo Nível";
+var llf_en = "Low Level Formatting";
 
-var hlfPt = "Formatação de Alto Nível"
-var hlfEn = "High Level Formatting"
+var hlf_pt = "Formatação de Alto Nível";
+var hlf_en = "High Level Formatting";
 
-var aboutPt = "Sobre"
-var aboutEn = "About"
+var about_pt = "Sobre";
+var about_en = "About";
 
-var creditsPt = "Créditos"
-var creditsEn = "Credits"
+var credits_pt = "Créditos";
+var credits_en = "Credits";
 
-var aboutTextPt = "<p>Nosso REA é tardado.</p>"
-var aboutTextEn = "<p>Our OER is late...</p>"
+var about_text_pt = "<p>Nosso REA é tardado.</p>";
+var about_text_en = "<p>Our OER is late...</p>";
 
-var creditsTextPt = "<p>Créditos:</p>" +
+var credits_text_pt = "<p>Créditos:</p>" +
 			"<p>Esta aplicação informativa foi desenvolvida como Recurso Educacional Aberto (REA) dentro da disciplina de Sistemas Operacionais I.<br>" +
 			"Seu desenvolvimento foi supervisionado pelo professor Paulo Sérgio Lopes de Souza, e implementado pelos alunos:</p>" +
 			"<p>Danilo Zecchin Nery<br>" +
@@ -32,7 +32,7 @@ var creditsTextPt = "<p>Créditos:</p>" +
 			"<p>Universidade de São Paulo, Institudo de Ciências Matemáticas e de Computação (ICMC - USP).<br>" +
 			"São Carlos - SP, Brasil.<br>" +
 			"Segundo semestre de 2015.</p>";
-var creditsTextEn = "<p>Credits:</p>" +
+var credits_text_en = "<p>Credits:</p>" +
 			"<p>This informative application was developed as an Open Educational Resource (OER), within the discipline of Operational Systems I.<br>" +
 			"Its development was supervised by professor Paulo Sérgio Lopes de Souza, and implemented by the students:</p>" +
 			"<p>Danilo Zecchin Nery<br>" +
@@ -44,10 +44,10 @@ var creditsTextEn = "<p>Credits:</p>" +
 			"Second semester of 2015.</p>";
 
 var Languages = {
-	PtBr : 0, 
-	EnUs : 1
+	_ptBr : 0, 
+	_enUs : 1
 };
-var lang = Languages.PtBr;
+var lang = Languages._ptBr;
 
 var Section = {
 	About : 0,
@@ -57,16 +57,19 @@ var Section = {
 var currentSection = Section.Other;
 
 var canvas = false;
-var RpmSelector = false;
-var RpmText = false;
-var rpm = 4;
+
+var rpm_slider = false;
+var rpm_text = false;
+var rpm = 16;
 
 var disk_cover = false;
 var disk_case = false;
 var disk_platter = false;
 var disk_actuator = false;
 
-var stopAnimation = false;
+var paragraph;
+
+var stop_anim = false;
 
 initialize();
 
@@ -111,16 +114,16 @@ function initialize()
 		disk_actuator.top = 350;
 	});
 
-	RpmText = $("#rpm");
-	if(lang == Languages.EnUs)
-		RpmText.html("Disk Rotation Speed (RPM): " + rpm);
+	rpm_text = $("#rpm");
+	if(lang == Languages._enUs)
+		rpm_text.html("Disk Rotation Speed (RPM): " + rpm);
 	else
-		RpmText.html("Velocidade do Disco (RPM): " + rpm);
+		rpm_text.html("Velocidade do Disco (RPM): " + rpm);
 
-	RpmText.hide();
+	rpm_text.hide();
 	
-	RpmSelector = $("#selector");
-	RpmSelector.slider(
+	rpm_slider = $("#selector");
+	rpm_slider.slider(
 	{
 		min: 0,
 		max: 32,
@@ -128,18 +131,22 @@ function initialize()
 		step: 4,
 		slide: function(event, ui)
 		{
-			rpm = ui.value;
-
-			if(lang == Languages.EnUs)
-				RpmText.html("Disk Rotation Speed (RPM): " + rpm);
+			if(lang == Languages._enUs)
+				rpm_text.html("Disk Rotation Speed (RPM): " + ui.value);
 			else
-				RpmText.html("Velocidade do Disco (RPM): " + rpm);
-
-			platterAnimate();
-			actuatorAnimate();
+				rpm_text.html("Velocidade do Disco (RPM): " + ui.value);
+			actuator_angle = 30;
+			disk_actuator.setAngle(30);
+		},
+		stop: function(event, ui)
+		{
+			rpm = ui.value;
+			platterAnimate(rpm);
 		}
 	});
-	RpmSelector.hide();
+	rpm_slider.hide();
+	
+	paragraph = $("#subtitle");
 
 	canvas = new fabric.Canvas('canvas', 
 	{
@@ -153,7 +160,7 @@ function initialize()
 
 function hardDisk()
 {
-	stopAnimation = false;
+	stop_anim = false;
 
 	canvas.insertAt(disk_case, 0, true);
 	canvas.insertAt(disk_platter, 1, true);
@@ -162,94 +169,166 @@ function hardDisk()
 
 	disk_cover.left = 415;
 
-	platterAnimate();
-	actuatorAnimate();
+	platterAnimate(rpm);
+	actuator_angle = 30;
+	disk_actuator.setAngle(30);
 
 	$("#canvas").show();
-	RpmText.show();
-	RpmSelector.show();
+	rpm_text.show();
+	rpm_slider.show();
 
 	currentSection = Section.Other;
 }
 
 function lowLevelFormatting()
 {
-	stopAnimation = false;
+	stop_anim = false;
 
 	canvas.insertAt(disk_case, 0, true);
 	canvas.insertAt(disk_platter, 1, true);
 	canvas.insertAt(disk_actuator, 2, true);
 
-	platterAnimate();
-	actuatorAnimate();
+	platterAnimate(rpm);
+	actuator_angle = 30;
+	disk_actuator.setAngle(30);
 
 	$("#canvas").show();
-	RpmText.show();
-	RpmSelector.show();
+	rpm_text.show();
+	rpm_slider.show();
 
 	currentSection = Section.Other;
 }
 
-function platterAnimate()
+var reading = true;
+var current_track = 0;
+var skew = 0;
+var platter_angle = 0;
+var platter_division = 8;
+
+function platterAnimate(animation_rpm)
 {
-	if(stopAnimation == false)
+	console.log(animation_rpm);
+	if(stop_anim == false || rpm > 0) 
 	{
 		fabric.util.animate(
 		{
 			startValue: 0,
 			endValue: 360,
-			duration: 60000 / rpm ,
+			duration: 60000 / animation_rpm ,
 
 			easing: function(t, b, c, d) { return c*t/d + b; },
 
 			onChange: function(angle)
 			{
+				platter_angle = angle;
 				disk_platter.setAngle(angle);
 				canvas.renderAll();
 			},
-			onComplete: platterAnimate
+			onComplete: function()
+			{
+				if(animation_rpm == rpm)
+				{
+					if(reading == true)
+					{
+						var randTrack = Math.round(Math.random() * 2);
+						actuatorAnimateTo(randTrack);
+						reading = false;
+						paragraph.append("End reading " + current_track);
+					}
+					else
+					{
+						reading = true;
+						paragraph.append("Begin reading " + current_track);
+					}
+					paragraph.append("<br/>");
+					platterAnimate(animation_rpm);
+				}
+			},
+			abort: function()
+			{
+				if(animation_rpm != rpm)
+					return true;
+				return false;
+			}
 		});
 	}
 };
 
-function actuatorAnimate()
+var actuator_velocity = 20;
+var actuator_angle = 30;
+var actuator_moving = false;
+
+function actuatorAnimateTo(track)
 {
-	if(stopAnimation == false)
+	if(actuator_moving == true)
+		return;
+
+	actuator_moving = true;
+	
+	var angle;
+	if(track == 0)
+		angle = 30;
+	else if(track == 1)
+		angle = 40;
+	else if(track == 2)
+		angle = 55;
+	
+	if(actuator_angle == angle)
 	{
+		actuator_moving = false;
+		return;
+	}
+	
+	if(stop_anim == false)
+	{
+		var auxiliar = angle;
 		fabric.util.animate(
 		{
-			startValue: 0,
-			endValue: 55,
-			duration: 60000 / rpm ,
+			startValue: actuator_angle,
+			endValue: angle,
+			duration: 1000 * Math.abs(actuator_angle - angle) / actuator_velocity,
 
-			easing: function(t, b, c, d) { if(t > d/2) return c*t/d + b; else return c*(1 - t/d) + b },
+			easing: function(t, b, c, d) { return c*t/d + b; },
 
-			onChange: function(angle)
+			onChange: function(value)
 			{
-				disk_actuator.setAngle(angle);
+				disk_actuator.setAngle(value);
 				canvas.renderAll();
 			},
-			onComplete: actuatorAnimate
+			onComplete: function()
+			{
+				if(platter_angle <= skew * track * 360 / platter_division)
+				{
+					reading = true;
+					paragraph.append("Begin reading " + current_track + '\n');
+					paragraph.append("<br/>");
+				}
+				actuator_angle = auxiliar;
+				actuator_moving = false;
+				current_track = track;
+			}
 		});
 	}
+	else
+		actuator_moving = false;
 };
 
 function about()
 {
-	if(lang == Languages.PtBr)
-		$("#text").html(aboutTextPt);
+	if(lang == Languages._ptBr)
+		$("#text").html(about_text_pt);
 	else
-		$("#text").html(aboutTextEn);
+		$("#text").html(about_text_en);
 
 	currentSection = Section.About;
 }
 
 function credits()
 {
-	if(lang == Languages.PtBr)
-		$("#text").html(creditsTextPt);
+	if(lang == Languages._ptBr)
+		$("#text").html(credits_text_pt);
 	else
-		$("#text").html(creditsTextEn);
+		$("#text").html(credits_text_en);
 
 	currentSection = Section.Credits;
 }
@@ -278,34 +357,34 @@ function resetLang()
 
 function setLangPt()
 {
-	lang = Languages.PtBr;
+	lang = Languages._ptBr;
 
-	$("#title").html(titlePt);
-	$("#title-text").html(titlePt);
-	$("#begin-button").html(beginPt);
-	$("#hd-button").html(hdPt);
-	$("#llf-button").html(llfPt);
-	$("#hlf-button").html(hlfPt);
-	$("#about-button").html(aboutPt);
-	$("#credits-button").html(creditsPt);
-	RpmText.html("Velocidade do Disco (RPM): " + rpm);
+	$("#title").html(title_pt);
+	$("#title-text").html(title_pt);
+	$("#begin-button").html(begin_pt);
+	$("#hd-button").html(hd_pt);
+	$("#llf-button").html(llf_pt);
+	$("#hlf-button").html(hlf_pt);
+	$("#about-button").html(about_pt);
+	$("#credits-button").html(credits_pt);
+	rpm_text.html("Velocidade do Disco (RPM): " + rpm);
 
 	resetLang();
 }
 
 function setLangEn()
 {
-	lang = Languages.EnUs;
+	lang = Languages._enUs;
 
-	$("#title").html(titleEn);
-	$("#title-text").html(titleEn);
-	$("#begin-button").html(beginEn);
-	$("#hd-button").html(hdEn);
-	$("#llf-button").html(llfEn);
-	$("#hlf-button").html(hlfEn);
-	$("#about-button").html(aboutEn);
-	$("#credits-button").html(creditsEn);
-	RpmText.html("Disk Rotation Speed (RPM): " + rpm);
+	$("#title").html(title_en);
+	$("#title-text").html(title_en);
+	$("#begin-button").html(begin_en);
+	$("#hd-button").html(hd_en);
+	$("#llf-button").html(llf_en);
+	$("#hlf-button").html(hlf_en);
+	$("#about-button").html(about_en);
+	$("#credits-button").html(credits_en);
+	rpm_text.html("Disk Rotation Speed (RPM): " + rpm);
 
 	resetLang();
 }
@@ -313,8 +392,8 @@ function setLangEn()
 function hideAll()
 {
 	$("#canvas").hide();
-	RpmText.hide();
-	RpmSelector.hide();
+	rpm_text.hide();
+	rpm_slider.hide();
 
 	canvas.remove(disk_cover);
 	canvas.remove(disk_case);
@@ -323,5 +402,5 @@ function hideAll()
 
 	$("#text").html("");
 	
-	stopAnimation = true;
+	stop_anim = true;
 }
