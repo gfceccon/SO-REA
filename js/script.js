@@ -1,7 +1,7 @@
 var canvas = false;
 
-var RpmSelector = false;
-var RpmText = false;
+var rpm_slider = false;
+var rpm_text = false;
 var rpm = 16;
 
 var disk_cover = false;
@@ -11,7 +11,7 @@ var disk_actuator = false;
 
 var paragraph;
 
-var stopAnimation = false;
+var stop_anim = false;
 
 initialize();
 
@@ -56,12 +56,12 @@ function initialize()
 		disk_actuator.top = 350;
 	});
 
-	RpmText = $("#rpm");
-	RpmText.html("Disk rotation speed (RPM): " + rpm);
-	RpmText.hide();
+	rpm_text = $("#rpm");
+	rpm_text.html("Disk rotation speed (RPM): " + rpm);
+	rpm_text.hide();
 	
-	RpmSelector = $("#selector");
-	RpmSelector.slider(
+	rpm_slider = $("#selector");
+	rpm_slider.slider(
 	{
 		min: 0,
 		max: 32,
@@ -69,18 +69,17 @@ function initialize()
 		step: 4,
 		slide: function(event, ui)
 		{
-			rpm = ui.value;
-			RpmText.html("Disk rotation speed (RPM): " + rpm);
+			rpm_text.html("Disk rotation speed (RPM): " + ui.value);
 			actuator_angle = 30;
 			disk_actuator.setAngle(30);
 		},
 		stop: function(event, ui)
 		{
-			console.log("stop");
-			platterAnimate();
+			rpm = ui.value;
+			platterAnimate(rpm);
 		}
 	});
-	RpmSelector.hide();
+	rpm_slider.hide();
 	
 	paragraph = $("#subtitle");
 
@@ -96,7 +95,7 @@ function initialize()
 
 function hardDisk()
 {
-	stopAnimation = false;
+	stop_anim = false;
 
 	canvas.insertAt(disk_case, 0, true);
 	canvas.insertAt(disk_platter, 1, true);
@@ -105,30 +104,30 @@ function hardDisk()
 
 	disk_cover.left = 400;
 
-	platterAnimate();
+	platterAnimate(rpm);
 	actuator_angle = 30;
 	disk_actuator.setAngle(30);
 
 	$("#canvas").show();
-	RpmText.show();
-	RpmSelector.show();
+	rpm_text.show();
+	rpm_slider.show();
 }
 
 function lowLevelFormatting()
 {
-	stopAnimation = false;
+	stop_anim = false;
 
 	canvas.insertAt(disk_case, 0, true);
 	canvas.insertAt(disk_platter, 1, true);
 	canvas.insertAt(disk_actuator, 2, true);
 
-	platterAnimate();
+	platterAnimate(rpm);
 	actuator_angle = 30;
 	disk_actuator.setAngle(30);
 
 	$("#canvas").show();
-	RpmText.show();
-	RpmSelector.show();
+	rpm_text.show();
+	rpm_slider.show();
 }
 
 var reading = true;
@@ -137,15 +136,16 @@ var skew = 0;
 var platter_angle = 0;
 var platter_division = 8;
 
-function platterAnimate()
+function platterAnimate(animation_rpm)
 {
-	if(stopAnimation == false || rpm > 0) 
+	console.log(animation_rpm);
+	if(stop_anim == false || rpm > 0) 
 	{
 		fabric.util.animate(
 		{
 			startValue: 0,
 			endValue: 360,
-			duration: 60000 / rpm ,
+			duration: 60000 / animation_rpm ,
 
 			easing: function(t, b, c, d) { return c*t/d + b; },
 
@@ -157,20 +157,29 @@ function platterAnimate()
 			},
 			onComplete: function()
 			{
-				console.log("asd");
-				if(reading == true)
+				if(animation_rpm == rpm)
 				{
-					var randTrack = Math.round(Math.random() * 2);
-					actuatorAnimateTo(randTrack);
-					reading = false;
-					paragraph.append("End reading " + current_track + '\n');
+					if(reading == true)
+					{
+						var randTrack = Math.round(Math.random() * 2);
+						actuatorAnimateTo(randTrack);
+						reading = false;
+						paragraph.append("End reading " + current_track);
+					}
+					else
+					{
+						reading = true;
+						paragraph.append("Begin reading " + current_track);
+					}
+					paragraph.append("<br/>");
+					platterAnimate(animation_rpm);
 				}
-				else
-				{
-					reading = true;
-					paragraph.append("Begin reading " + current_track + '\n');
-				}
-				platterAnimate();
+			},
+			abort: function()
+			{
+				if(animation_rpm != rpm)
+					return true;
+				return false;
 			}
 		});
 	}
@@ -201,7 +210,7 @@ function actuatorAnimateTo(track)
 		return;
 	}
 	
-	if(stopAnimation == false)
+	if(stop_anim == false)
 	{
 		var auxiliar = angle;
 		fabric.util.animate(
@@ -223,6 +232,7 @@ function actuatorAnimateTo(track)
 				{
 					reading = true;
 					paragraph.append("Begin reading " + current_track + '\n');
+					paragraph.append("<br/>");
 				}
 				actuator_angle = auxiliar;
 				actuator_moving = false;
@@ -242,8 +252,8 @@ function about()
 function hideAll()
 {
 	$("#canvas").hide();
-	RpmText.hide();
-	RpmSelector.hide();
+	rpm_text.hide();
+	rpm_slider.hide();
 
 	canvas.remove(disk_cover);
 	canvas.remove(disk_case);
@@ -252,5 +262,5 @@ function hideAll()
 
 	$("#text").html("");
 	
-	stopAnimation = true;
+	stop_anim = true;
 }
