@@ -94,7 +94,7 @@ function initialize()
 		disk_case.top = 300;
 	});
 
-	fabric.Image.fromURL('images/disk_platter.png', function(disk_platterImg)
+	fabric.Image.fromURL('images/unskewed_platter.png', function(disk_platterImg)
 	{
 		disk_platter = disk_platterImg;
 		disk_platter.originX = disk_platter.originY = 'center';
@@ -137,11 +137,12 @@ function initialize()
 				rpm_text.html("Velocidade do Disco (RPM): " + ui.value);
 			actuator_angle = 30;
 			disk_actuator.setAngle(30);
+			rpm = 0;
 		},
 		stop: function(event, ui)
 		{
 			rpm = ui.value;
-			platterAnimate(rpm);
+			platterAnimate(rpm, 0, 0);
 		}
 	});
 	rpm_slider.hide();
@@ -169,7 +170,7 @@ function hardDisk()
 
 	disk_cover.left = 415;
 
-	platterAnimate(rpm);
+	platterAnimate(rpm, 0, 0);
 	actuator_angle = 30;
 	disk_actuator.setAngle(30);
 
@@ -188,7 +189,7 @@ function lowLevelFormatting()
 	canvas.insertAt(disk_platter, 1, true);
 	canvas.insertAt(disk_actuator, 2, true);
 
-	platterAnimate(rpm);
+	platterAnimate(rpm, 0, 0);
 	actuator_angle = 30;
 	disk_actuator.setAngle(30);
 
@@ -201,19 +202,20 @@ function lowLevelFormatting()
 
 var reading = true;
 var current_track = 0;
-var skew = 0;
+var skew = 1;
 var platter_angle = 0;
 var platter_division = 8;
+var initial_angle = 15;
 
-function platterAnimate(animation_rpm)
+function platterAnimate(animation_rpm, prev_track, track)
 {
 	console.log(animation_rpm);
 	if(stop_anim == false || rpm > 0) 
 	{
 		fabric.util.animate(
 		{
-			startValue: 0,
-			endValue: 360,
+			startValue: 0 + initial_angle + prev_track*prev_track * 2,
+			endValue: 360 + initial_angle + track*track * 2,
 			duration: 60000 / animation_rpm ,
 
 			easing: function(t, b, c, d) { return c*t/d + b; },
@@ -234,14 +236,15 @@ function platterAnimate(animation_rpm)
 						actuatorAnimateTo(randTrack);
 						reading = false;
 						paragraph.append("End reading " + current_track);
+						platterAnimate(animation_rpm, track, randTrack);
 					}
 					else
 					{
 						reading = true;
 						paragraph.append("Begin reading " + current_track);
+						platterAnimate(animation_rpm, track, track);
 					}
 					paragraph.append("<br/>");
-					platterAnimate(animation_rpm);
 				}
 			},
 			abort: function()
