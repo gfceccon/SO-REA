@@ -1,3 +1,61 @@
+var title_pt = "Formatação de Disco";
+var title_en = "Disk Formatting";
+
+var begin_pt = "Iniciar";
+var begin_en = "Begin";
+
+var hd_pt = "Disco Rígido";
+var hd_en = "Hard Disk";
+
+var llf_pt = "Formatação de Baixo Nível";
+var llf_en = "Low Level Formatting";
+
+var hlf_pt = "Formatação de Alto Nível";
+var hlf_en = "High Level Formatting";
+
+var about_pt = "Sobre";
+var about_en = "About";
+
+var credits_pt = "Créditos";
+var credits_en = "Credits";
+
+var about_text_pt = "<p>Nosso REA é tardado.</p>";
+var about_text_en = "<p>Our OER is late...</p>";
+
+var credits_text_pt = "<p>Créditos:</p>" +
+			"<p>Esta aplicação informativa foi desenvolvida como Recurso Educacional Aberto (REA) dentro da disciplina de Sistemas Operacionais I.<br>" +
+			"Seu desenvolvimento foi supervisionado pelo professor Paulo Sérgio Lopes de Souza, e implementado pelos alunos:</p>" +
+			"<p>Danilo Zecchin Nery<br>" +
+			"Guilherme Zanardo Borduchi<br>" +
+			"Gustavo Ferreira Ceccon<br>" +
+			"Lucas Silveira de Moura</p>" +
+			"<p>Universidade de São Paulo, Institudo de Ciências Matemáticas e de Computação (ICMC - USP).<br>" +
+			"São Carlos - SP, Brasil.<br>" +
+			"Segundo semestre de 2015.</p>";
+var credits_text_en = "<p>Credits:</p>" +
+			"<p>This informative application was developed as an Open Educational Resource (OER), within the discipline of Operational Systems I.<br>" +
+			"Its development was supervised by professor Paulo Sérgio Lopes de Souza, and implemented by the students:</p>" +
+			"<p>Danilo Zecchin Nery<br>" +
+			"Guilherme Zanardo Borduchi<br>" +
+			"Gustavo Ferreira Ceccon<br>" +
+			"Lucas Silveira de Moura</p>" +
+			"<p>University of São Paulo, Institute of Mathematics and Computer Sciences (ICMC - USP).<br>" +
+			"São Carlos - SP, Brasil.<br>" +
+			"Second semester of 2015.</p>";
+
+var Languages = {
+	_ptBr : 0, 
+	_enUs : 1
+};
+var lang = Languages._ptBr;
+
+var Section = {
+	About : 0,
+	Credits : 1,
+	Other : 2,
+};
+var currentSection = Section.Other;
+
 var canvas = false;
 
 var rpm_slider = false;
@@ -22,7 +80,7 @@ function initialize()
 		disk_cover = disk_coverImg;
 		disk_cover.originX = disk_cover.originY = 'center';
 		disk_cover.lockMovementY = true;
-		disk_cover.left = 400;
+		disk_cover.left = 415;
 		disk_cover.top = 300;
 	});
 
@@ -57,7 +115,11 @@ function initialize()
 	});
 
 	rpm_text = $("#rpm");
-	rpm_text.html("Disk rotation speed (RPM): " + rpm);
+	if(lang == Languages._enUs)
+		rpm_text.html("Disk Rotation Speed (RPM): " + rpm);
+	else
+		rpm_text.html("Velocidade do Disco (RPM): " + rpm);
+
 	rpm_text.hide();
 	
 	rpm_slider = $("#selector");
@@ -69,7 +131,10 @@ function initialize()
 		step: 4,
 		slide: function(event, ui)
 		{
-			rpm_text.html("Disk rotation speed (RPM): " + ui.value);
+			if(lang == Languages._enUs)
+				rpm_text.html("Disk Rotation Speed (RPM): " + ui.value);
+			else
+				rpm_text.html("Velocidade do Disco (RPM): " + ui.value);
 			actuator_angle = 30;
 			disk_actuator.setAngle(30);
 		},
@@ -102,7 +167,7 @@ function hardDisk()
 	canvas.insertAt(disk_actuator, 2, true);
 	canvas.insertAt(disk_cover, 3, true);
 
-	disk_cover.left = 400;
+	disk_cover.left = 415;
 
 	platterAnimate(rpm);
 	actuator_angle = 30;
@@ -111,6 +176,8 @@ function hardDisk()
 	$("#canvas").show();
 	rpm_text.show();
 	rpm_slider.show();
+
+	currentSection = Section.Other;
 }
 
 function lowLevelFormatting()
@@ -128,6 +195,8 @@ function lowLevelFormatting()
 	$("#canvas").show();
 	rpm_text.show();
 	rpm_slider.show();
+
+	currentSection = Section.Other;
 }
 
 var reading = true;
@@ -246,7 +315,78 @@ function actuatorAnimateTo(track)
 
 function about()
 {
-	$("#text").html("This is our OER!");
+	if(lang == Languages._ptBr)
+		$("#text").html(about_text_pt);
+	else
+		$("#text").html(about_text_en);
+
+	currentSection = Section.About;
+}
+
+function credits()
+{
+	if(lang == Languages._ptBr)
+		$("#text").html(credits_text_pt);
+	else
+		$("#text").html(credits_text_en);
+
+	currentSection = Section.Credits;
+}
+
+function resetLang()
+{
+	switch(currentSection)
+	{
+		case Section.About:
+			hideAll();
+			about();
+			break;
+
+		case Section.Credits:
+			hideAll();
+			credits();
+			break;
+
+		case Section.Other:
+			break;
+
+		default:
+			break;
+	}
+}
+
+function setLangPt()
+{
+	lang = Languages._ptBr;
+
+	$("#title").html(title_pt);
+	$("#title-text").html(title_pt);
+	$("#begin-button").html(begin_pt);
+	$("#hd-button").html(hd_pt);
+	$("#llf-button").html(llf_pt);
+	$("#hlf-button").html(hlf_pt);
+	$("#about-button").html(about_pt);
+	$("#credits-button").html(credits_pt);
+	rpm_text.html("Velocidade do Disco (RPM): " + rpm);
+
+	resetLang();
+}
+
+function setLangEn()
+{
+	lang = Languages._enUs;
+
+	$("#title").html(title_en);
+	$("#title-text").html(title_en);
+	$("#begin-button").html(begin_en);
+	$("#hd-button").html(hd_en);
+	$("#llf-button").html(llf_en);
+	$("#hlf-button").html(hlf_en);
+	$("#about-button").html(about_en);
+	$("#credits-button").html(credits_en);
+	rpm_text.html("Disk Rotation Speed (RPM): " + rpm);
+
+	resetLang();
 }
 
 function hideAll()
