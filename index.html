@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Recurso Educacional Aberto - REA</title>
+    <title id="title">Formatação de Disco</title>
 
     <!-- JQuery UI CSS -->
     <link href="css/jquery-ui.min.css" rel="stylesheet">
@@ -40,27 +40,27 @@
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
                 <li class="sidebar-brand">
-                    <a href="#">
-                        Hard Disk Formatting
+                    <a href="#" id="title-text">
+                        Formatação de Disco
                     </a>
                 </li>
                 <li>
-                    <a href="#" id="begin-button">Begin</a>
+                    <a href="#" id="begin-button">Iniciar</a>
                 </li>
                 <li>
-                    <a href="#" id="hd-button" onclick="hideAll();hardDisk();">Hard Disk</a>
+                    <a href="#" id="hd-button" onclick="hideAll();hardDisk();">Disco Rígido</a>
                 </li>
                 <li>
-                    <a href="#" id="llf-button" onclick="hideAll();lowLevelFormatting();">Low Level Formatting</a>
+                    <a href="#" id="llf-button" onclick="hideAll();lowLevelFormatting();">Formatação de Baixo Nível</a>
                 </li>
                 <li>
-                    <a href="#" id="hlf-button">High Level Formatting</a>
+                    <a href="#" id="hlf-button">Formatação de Baixo Nível</a>
                 </li>
                 <li>
-                    <a href="#" id="about-button" onclick="hideAll();about();">About</a>
+                    <a href="#" id="about-button" onclick="hideAll();about();">Sobre</a>
                 </li>
                 <li>
-                    <a href="#" id="credits-button" onclick="hideAll();credits();">Credits</a>
+                    <a href="#" id="credits-button" onclick="hideAll();credits();">Créditos</a>
                 </li>
                 <li>
                     <div id="rpm"></div>
@@ -79,8 +79,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-						<p id="text">
-						</p>
+						<p id="text"></p>
 						<div style="width: 100%; overflow: hidden;">
 							<div style="width: 900px; float: left;"> 
 								<canvas id="canvas" width="800" height="600">

@@ -1,4 +1,28 @@
-var creditsPt = "<p>Créditos:</p>" +
+var titlePt = "Formatação de Disco"
+var titleEn = "Disk Formatting"
+
+var beginPt = "Iniciar"
+var beginEn = "Begin"
+
+var hdPt = "Disco Rígido"
+var hdEn = "Hard Disk"
+
+var llfPt = "Formatação de Baixo Nível"
+var llfEn = "Low Level Formatting"
+
+var hlfPt = "Formatação de Alto Nível"
+var hlfEn = "High Level Formatting"
+
+var aboutPt = "Sobre"
+var aboutEn = "About"
+
+var creditsPt = "Créditos"
+var creditsEn = "Credits"
+
+var aboutTextPt = "<p>Nosso REA é tardado.</p>"
+var aboutTextEn = "<p>Our OER is late...</p>"
+
+var creditsTextPt = "<p>Créditos:</p>" +
 			"<p>Esta aplicação informativa foi desenvolvida como Recurso Educacional Aberto (REA) dentro da disciplina de Sistemas Operacionais I.<br>" +
 			"Seu desenvolvimento foi supervisionado pelo professor Paulo Sérgio Lopes de Souza, e implementado pelos alunos:</p>" +
 			"<p>Danilo Zecchin Nery<br>" +
@@ -8,8 +32,8 @@ var creditsPt = "<p>Créditos:</p>" +
 			"<p>Universidade de São Paulo, Institudo de Ciências Matemáticas e de Computação (ICMC - USP).<br>" +
 			"São Carlos - SP, Brasil.<br>" +
 			"Segundo semestre de 2015.</p>";
-var creditsEn = "<p>Credits:</p>" +
-			"<p>This informative application was developed as an Open Educational Resourse (OER), within the discipline of Operational Systems I.<br>" +
+var creditsTextEn = "<p>Credits:</p>" +
+			"<p>This informative application was developed as an Open Educational Resource (OER), within the discipline of Operational Systems I.<br>" +
 			"Its development was supervised by professor Paulo Sérgio Lopes de Souza, and implemented by the students:</p>" +
 			"<p>Danilo Zecchin Nery<br>" +
 			"Guilherme Zanardo Borduchi<br>" +
@@ -24,6 +48,7 @@ var Languages = {
 	EnUs : 1
 };
 var lang = Languages.PtBr;
+
 var Section = {
 	About : 0,
 	Credits : 1,
@@ -52,7 +77,7 @@ function initialize()
 		disk_cover = disk_coverImg;
 		disk_cover.originX = disk_cover.originY = 'center';
 		disk_cover.lockMovementY = true;
-		disk_cover.left = 400;
+		disk_cover.left = 415;
 		disk_cover.top = 300;
 	});
 
@@ -87,7 +112,11 @@ function initialize()
 	});
 
 	RpmText = $("#rpm");
-	RpmText.html("Disk rotation speed (RPM): " + rpm);
+	if(lang == Languages.EnUs)
+		RpmText.html("Disk Rotation Speed (RPM): " + rpm);
+	else
+		RpmText.html("Velocidade do Disco (RPM): " + rpm);
+
 	RpmText.hide();
 	
 	RpmSelector = $("#selector");
@@ -100,7 +129,12 @@ function initialize()
 		slide: function(event, ui)
 		{
 			rpm = ui.value;
-			RpmText.html("Disk rotation speed (RPM): " + rpm);
+
+			if(lang == Languages.EnUs)
+				RpmText.html("Disk Rotation Speed (RPM): " + rpm);
+			else
+				RpmText.html("Velocidade do Disco (RPM): " + rpm);
+
 			platterAnimate();
 			actuatorAnimate();
 		}
@@ -126,7 +160,7 @@ function hardDisk()
 	canvas.insertAt(disk_actuator, 2, true);
 	canvas.insertAt(disk_cover, 3, true);
 
-	disk_cover.left = 400;
+	disk_cover.left = 415;
 
 	platterAnimate();
 	actuatorAnimate();
@@ -202,7 +236,10 @@ function actuatorAnimate()
 
 function about()
 {
-	$("#text").html("This is our OER!");
+	if(lang == Languages.PtBr)
+		$("#text").html(aboutTextPt);
+	else
+		$("#text").html(aboutTextEn);
 
 	currentSection = Section.About;
 }
@@ -210,13 +247,9 @@ function about()
 function credits()
 {
 	if(lang == Languages.PtBr)
-	{
-		$("#text").html(creditsPt);
-	}
-	if(lang == Languages.EnUs)
-	{
-		$("#text").html(creditsEn);
-	}
+		$("#text").html(creditsTextPt);
+	else
+		$("#text").html(creditsTextEn);
 
 	currentSection = Section.Credits;
 }
@@ -246,12 +279,34 @@ function resetLang()
 function setLangPt()
 {
 	lang = Languages.PtBr;
+
+	$("#title").html(titlePt);
+	$("#title-text").html(titlePt);
+	$("#begin-button").html(beginPt);
+	$("#hd-button").html(hdPt);
+	$("#llf-button").html(llfPt);
+	$("#hlf-button").html(hlfPt);
+	$("#about-button").html(aboutPt);
+	$("#credits-button").html(creditsPt);
+	RpmText.html("Velocidade do Disco (RPM): " + rpm);
+
 	resetLang();
 }
 
 function setLangEn()
 {
 	lang = Languages.EnUs;
+
+	$("#title").html(titleEn);
+	$("#title-text").html(titleEn);
+	$("#begin-button").html(beginEn);
+	$("#hd-button").html(hdEn);
+	$("#llf-button").html(llfEn);
+	$("#hlf-button").html(hlfEn);
+	$("#about-button").html(aboutEn);
+	$("#credits-button").html(creditsEn);
+	RpmText.html("Disk Rotation Speed (RPM): " + rpm);
+
 	resetLang();
 }
 
