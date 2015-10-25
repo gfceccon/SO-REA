@@ -63,12 +63,7 @@ var rpm_slider = false;
 var rpm_text = false;
 var rpm = 16;
 
-var disk_cover_img = false;
-var disk_platter_img = false;
-var actuator_text_img = false;
-var track_text_img = false;
-var platter_text_img = false
-
+/// -- INSTANCES VARIABLES --- ///
 var disk_case_inst = false;
 var disk_cover_inst = false;
 var disk_platter_inst = false;
@@ -79,6 +74,13 @@ var track_text_inst = false;
 var track_path_inst = false;
 var platter_text_inst = false;
 var platter_path_inst = false;
+
+// --- IMAGES VARIABLES --- //
+var disk_cover_img = false;
+var disk_platter_img = false;
+var actuator_text_img = false;
+var track_text_img = false;
+var platter_text_img = false
 
 var content;
 var skew_table;
@@ -98,6 +100,8 @@ function initialize()
         left: 35,
         top: 22,
         opacity: 0.98,
+        lockScalingX: true,
+        lockScalingY: true,
         lockMovementY: true
     });
 
@@ -109,6 +113,7 @@ function initialize()
         originY: 'center',
         lockMovementX: true,
         lockMovementY: true,
+        lockRotation: true,
         selectable: false
     });
 
@@ -352,7 +357,7 @@ function lowLevelFormatting()
 {
     stop_anim = false;
     currentSection = Section.Other;
-    disk_platter_img.src = 'images/platters/unskewed_platter.png';
+    disk_platter_img.src = 'images/platters/skewed_platter.png';
 
     canvas.insertAt(disk_case_inst, 0, true);
     canvas.insertAt(disk_platter_inst, 1, true);
