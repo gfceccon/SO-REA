@@ -65,13 +65,20 @@ var rpm = 16;
 
 var disk_cover_img = false;
 var disk_platter_img = false;
-var sector_text_img = false;
+var actuator_text_img = false;
+var track_text_img = false;
+var platter_text_img = false
 
 var disk_case_inst = false;
 var disk_cover_inst = false;
 var disk_platter_inst = false;
 var disk_actuator_inst = false;
-var sector_text_inst = false;
+var actuator_text_inst = false;
+var actuator_path_inst = false;
+var track_text_inst = false;
+var track_path_inst = false;
+var platter_text_inst = false;
+var platter_path_inst = false;
 
 var content;
 var skew_table;
@@ -86,15 +93,16 @@ initialize();
 function initialize()
 {
     // --- INSTANCES BLOCK --- //
-    disk_cover_inst = new fabric.Image('images/disk_cover.png', {
-        left: 100,
-        top: 100,
-        angle: 30,
-        opacity: 0.85,
+    disk_cover_inst = new fabric.Image('images/disk_cover.png',
+    {
+        left: 35,
+        top: 22,
+        opacity: 0.98,
         lockMovementY: true
     });
 
-    disk_platter_inst = new fabric.Image('images/disk_platter.png', {
+    disk_platter_inst = new fabric.Image('images/platters/disk_platter.png',
+    {
         left: 317,
         top: 300,
         originX: 'center',
@@ -104,17 +112,43 @@ function initialize()
         selectable: false
     });
 
-    sector_text_inst = new fabric.Image('images/sector_text.png', {
-        left: 400,
-        top: 300,
+    actuator_text_inst = new fabric.Image('images/text_buttons/actuator_text_pt.png',
+    {
+        left: 700,
+        top: 450,
         originX: 'center',
         originY: 'center',
+        opacity: 0.85,
         lockMovementX: true,
         lockMovementY: true,
         selectable: false
     });
 
-    fabric.Image.fromURL('images/disk_case.png', function (disk_caseImg)
+    track_text_inst = new fabric.Image('images/text_buttons/track_text_pt.png',
+    {
+        left: 120,
+        top: 70,
+        originX: 'center',
+        originY: 'center',
+        opacity: 0.85,
+        lockMovementX: true,
+        lockMovementY: true,
+        selectable: false
+    });
+
+    platter_text_inst = new fabric.Image('images/text_buttons/platter_text_pt.png',
+    {
+        left: 650,
+        top: 100,
+        originX: 'center',
+        originY: 'center',
+        opacity: 0.85,
+        lockMovementX: true,
+        lockMovementY: true,
+        selectable: false
+    });
+
+    fabric.Image.fromURL('images/others/disk_case.png', function (disk_caseImg)
     {
         disk_case_inst = disk_caseImg;
         disk_case_inst.originX = disk_case_inst.originY = 'center';
@@ -124,16 +158,45 @@ function initialize()
         disk_case_inst.top = 300;
     });
 
-    fabric.Image.fromURL('images/disk_actuator_arm.png',
-                         function (disk_actuatorImg)
-                         {
-                             disk_actuator_inst = disk_actuatorImg;
-                             disk_actuator_inst.originX = disk_actuator_inst.originY = 'center';
-                             disk_actuator_inst.lockMovementX = disk_actuator_inst.lockMovementY = true;
-                             disk_actuator_inst.selectable = false;
-                             disk_actuator_inst.left = 610;
-                             disk_actuator_inst.top = 350;
-                         });
+    fabric.Image.fromURL('images/others/disk_actuator_arm.png', function (disk_actuatorImg)
+    {
+        disk_actuator_inst = disk_actuatorImg;
+        disk_actuator_inst.originX = disk_actuator_inst.originY = 'center';
+        disk_actuator_inst.lockMovementX = disk_actuator_inst.lockMovementY = true;
+        disk_actuator_inst.selectable = false;
+        disk_actuator_inst.left = 610;
+        disk_actuator_inst.top = 350;
+    });
+
+    fabric.Image.fromURL('images/paths/track_path.png', function (track_pathImg)
+    {
+        track_path_inst = track_pathImg;
+        track_path_inst.originX = track_path_inst.originY = 'center';
+        track_path_inst.lockMovementX = track_path_inst.lockMovementY = true;
+        track_path_inst.selectable = false;
+        track_path_inst.left = 154;
+        track_path_inst.top = 132;
+    });
+
+    fabric.Image.fromURL('images/paths/actuator_path.png', function (actuator_pathImg)
+    {
+        actuator_path_inst = actuator_pathImg;
+        actuator_path_inst.originX = actuator_path_inst.originY = 'center';
+        actuator_path_inst.lockMovementX = actuator_path_inst.lockMovementY = true;
+        actuator_path_inst.selectable = false;
+        actuator_path_inst.left = 625;
+        actuator_path_inst.top = 390;
+    });
+
+    fabric.Image.fromURL('images/paths/platter_path.png', function (platter_pathImg)
+    {
+        platter_path_inst = platter_pathImg;
+        platter_path_inst.originX = platter_path_inst.originY = 'center';
+        platter_path_inst.lockMovementX = platter_path_inst.lockMovementY = true;
+        platter_path_inst.selectable = false;
+        platter_path_inst.left = 558;
+        platter_path_inst.top = 173;
+    });
     // --- END INSTANCES BLOCK --- //
 
     // --- IMAGES BLOCK --- //
@@ -142,21 +205,35 @@ function initialize()
     {
         disk_cover_inst.setElement(disk_cover_img);
     }
-    disk_cover_img.src = 'images/br.png';
+    disk_cover_img.src = 'images/others/disk_cover_pt.png';
 
     disk_platter_img = new Image();
     disk_platter_img.onload = function ()
     {
         disk_platter_inst.setElement(disk_platter_img);
     }
-    disk_platter_img.src = 'images/skewed_platter.png';
+    disk_platter_img.src = 'images/platters/disk_platter.png';
 
-    sector_text_img = new Image();
-    sector_text_img.onload = function ()
+    actuator_text_img = new Image();
+    actuator_text_img.onload = function ()
     {
-        sector_text_inst.setElement(sector_text_img);
+        actuator_text_inst.setElement(actuator_text_img);
     }
-    sector_text_img.src = 'images/sector_text.png';
+    actuator_text_img.src = 'images/text_buttons/actuator_text_pt.png';
+
+    track_text_img = new Image();
+    track_text_img.onload = function ()
+    {
+        track_text_inst.setElement(track_text_img);
+    }
+    track_text_img.src = 'images/text_buttons/track_text_pt.png';
+
+    platter_text_img = new Image();
+    platter_text_img.onload = function ()
+    {
+        platter_text_inst.setElement(platter_text_img);
+    }
+    platter_text_img.src = 'images/text_buttons/platter_text_pt.png';
     // --- END IMAGES BLOCK --- //
 
     rpm_text = $("#rpm");
@@ -169,13 +246,13 @@ function initialize()
 
     rpm_slider = $("#selector");
     rpm_slider.slider(
-        {
-            min: 0,
-            max: 32,
-            value: rpm,
-            step: 4,
-            slide: function (event, ui)
-            {
+    {
+        min: 0,
+        max: 32,
+        value: rpm,
+        step: 4,
+        slide: function (event, ui)
+			{
                 if (lang == Languages._enUs)
                     rpm_text.html("Disk Rotation Speed (RPM): " + ui.value);
                 else
@@ -184,11 +261,11 @@ function initialize()
                 disk_actuator_inst.setAngle(30);
                 rpm = 0;
             },
-            stop: function (event, ui)
-            {
-                rpm = ui.value;
-                platterAnimate(rpm);
-            }
+		stop: function (event, ui)
+			{
+				rpm = ui.value;
+				platterAnimate(rpm);
+			}
         });
     rpm_slider.hide();
 
@@ -239,47 +316,33 @@ function hardDisk()
 {
     stop_anim = false;
     currentSection = Section.HardDisk;
+    disk_cover_inst.left = 35;
+
+    if (lang == Languages._ptBr)
+        disk_platter_img.src = 'images/platters/platter_presentation_pt.png';
+    else
+        disk_platter_img.src = 'images/platters/platter_presentation_en.png';
 
     canvas.insertAt(disk_case_inst, 0, true);
     canvas.insertAt(disk_platter_inst, 1, true);
     canvas.insertAt(disk_actuator_inst, 2, true);
-    canvas.insertAt(disk_cover_inst, 3, true);
-    canvas.insertAt(sector_text_inst, 4, true);
 
-    sector_path = new fabric.Path('M 250 250 L 600 100 L 800 100', {
-        selectable: false,
-        stroke: 'blue',
-        strokeWidth: 5,
-        fill: false,
-        originX: 'left',
-        originY: 'top'
-    });
+    canvas.insertAt(actuator_text_inst, 3, true);
+    canvas.insertAt(track_text_inst, 4, true);
+    canvas.insertAt(platter_text_inst, 5, true);
 
-    actuator_path = new fabric.Path('M 605 350 L 600 200 L 800 200', {
-        selectable: false,
-        stroke: 'green',
-        strokeWidth: 5,
-        fill: false,
-        originX: 'left',
-        originY: 'top'
-    });
+    canvas.insertAt(actuator_path_inst, 6, true);
+    canvas.insertAt(track_path_inst, 7, true);
+    canvas.insertAt(platter_path_inst, 8, true);
 
-    platter_path = new fabric.Path('M 425 60 L 440 40 L 535 120 L 510 130 M 485 80 L 600 50 L 800 50',
-        {
-            selectable: false,
-            stroke: 'red',
-            strokeWidth: 5,
-            fill: false,
-            originX: 'left',
-            originY: 'top'
-        });
+    canvas.insertAt(disk_cover_inst, 9, true);
 
-    canvas.insertAt(sector_path, 5, true);
-    canvas.insertAt(actuator_path, 6, true);
-    canvas.insertAt(platter_path, 7, true);
-
+<<<<<<< HEAD
     textAnimate();
     platterAnimate(rpm);
+=======
+    platterAnimate(rpm, 0, 0);
+>>>>>>> origin/master
     actuator_angle = 30;
     disk_actuator_inst.setAngle(30);
 
@@ -292,6 +355,7 @@ function lowLevelFormatting()
 {
     stop_anim = false;
     currentSection = Section.Other;
+    disk_platter_img.src = 'images/platters/unskewed_platter.png';
 
     canvas.insertAt(disk_case_inst, 0, true);
     canvas.insertAt(disk_platter_inst, 1, true);
@@ -312,7 +376,7 @@ function highLevelFormatting()
     stop_anim = false;
     currentSection = Section.Other;
 
-    //Wait for it...
+    // Wait for it...
 }
 
 var reading = true;
@@ -338,16 +402,14 @@ function platterAnimate(animation_rpm)
                 startValue: 0,
                 endValue: 360,
                 duration: 60000 / animation_rpm,
-
-                easing: function (t, b, c, d)
-                {
-                    return c * t / d + b;
-                },
-
-                onChange: function (angle)
-                {
+				easing: function (t, b, c, d)
+				{
+					return c * t / d + b;
+				},
+				onChange: function (angle)
+				{
 					prev_angle = cur_angle;
-                    cur_angle = angle;
+					cur_angle = angle;
 					
 					var target_angle = initial_angle[cur_track] + cur_track * skew * 360 / platter_division;
 					
@@ -355,12 +417,12 @@ function platterAnimate(animation_rpm)
 					&& cur_angle >= target_angle
 					&& target_angle > prev_angle
 					&& get_time() - begin_read >= 60000 / animation_rpm){
-                        if (reading == true) {
-                            reading = false;
-                            next_track = (next_track + 1) % 3;
-                            actuatorAnimateTo(next_track);
-                        } else {
-                            reading = true;
+						if (reading == true) {
+							reading = false;
+							next_track = (next_track + 1) % 3;
+							actuatorAnimateTo(next_track);
+						} else {
+							reading = true;
 							begin_read = get_time();
 							if(cur_track == 0)
 								circle_track0.attr("fill", "green");
@@ -368,24 +430,24 @@ function platterAnimate(animation_rpm)
 								circle_track1.attr("fill", "green");
 							else
 								circle_track2.attr("fill", "green");
-                        }
+						}
 					}
-                    disk_platter_inst.setAngle(angle);
-                    canvas.renderAll();
-                },
+					disk_platter_inst.setAngle(angle);
+					canvas.renderAll();
+				},
+				onComplete: function ()
+				{
+					if (animation_rpm == rpm)
+					{
+						platterAnimate(animation_rpm);
+					}
+				},
 
-                onComplete: function ()
-                {
-                    if (animation_rpm == rpm) {
-                        platterAnimate(animation_rpm);
-                    }
-                },
-
-                abort: function ()
-                {
-                    return (animation_rpm != rpm);
-                }
-            });
+				abort: function ()
+				{
+					return (animation_rpm != rpm);
+				}
+        });
     }
 }
 
@@ -419,36 +481,36 @@ function actuatorAnimateTo(track)
 		circle_track2.attr("fill", "red");
 		
         fabric.util.animate(
+        {
+            startValue: actuator_angle,
+            endValue: angle,
+            duration: 1000 * Math.abs(actuator_angle - angle) / actuator_velocity,
+            easing: function (t, b, c, d)
             {
-                startValue: actuator_angle,
-                endValue: angle,
-                duration: 1000 * Math.abs(actuator_angle - angle) / actuator_velocity,
-
-                easing: function (t, b, c, d)
-                {
-                    return c * t / d + b;
-                },
-
-                onChange: function (value)
-                {
-                    disk_actuator_inst.setAngle(value);
-                    canvas.renderAll();
-                },
-                onComplete: function ()
-                {
-					if(track == 0)
-						circle_track0.attr("fill", "yellow");
-					else if(track == 1)
-						circle_track1.attr("fill", "yellow");
-					else
-						circle_track2.attr("fill", "yellow");
-					
-                    actuator_angle = auxiliar;
-                    actuator_moving = false;
-                    cur_track = track;
-                }
-            });
-    } else {
+                return c * t / d + b;
+            },
+			onChange: function (value)
+			{
+				disk_actuator_inst.setAngle(value);
+				canvas.renderAll();
+			},
+			onComplete: function ()
+			{
+				if(track == 0)
+					circle_track0.attr("fill", "yellow");
+				else if(track == 1)
+					circle_track1.attr("fill", "yellow");
+				else
+					circle_track2.attr("fill", "yellow");
+				
+				actuator_angle = auxiliar;
+				actuator_moving = false;
+				cur_track = track;
+			}
+        });
+    }
+    else
+    {
         actuator_moving = false;
     }
 }
@@ -487,7 +549,8 @@ function setLangPt()
     $("#credits-button").html(credits_pt);
     rpm_text.html("Velocidade do Disco (RPM): " + rpm);
 
-    switch (currentSection) {
+    switch (currentSection)
+    {
         case Section.About:
             hideAll();
             about();
@@ -499,9 +562,11 @@ function setLangPt()
             break;
 
         case Section.HardDisk:
-            disk_cover_img.src = 'images/br.png';
-            disk_platter_img.src = 'images/skewed_platter.png';
-            sector_text_img.src = 'images/br.png';
+            disk_cover_img.src = 'images/others/disk_cover_pt.png';
+            disk_platter_img.src = 'images/platters/platter_presentation_pt.png';
+            actuator_text_img.src = 'images/text_buttons/actuator_text_pt.png';
+            track_text_img.src = 'images/text_buttons/track_text_pt.png';
+            platter_text_img.src = 'images/text_buttons/platter_text_pt.png';
             break;
 
         default:
@@ -523,7 +588,8 @@ function setLangEn()
     $("#credits-button").html(credits_en);
     rpm_text.html("Disk Rotation Speed (RPM): " + rpm);
 
-    switch (currentSection) {
+    switch (currentSection)
+    {
         case Section.About:
             hideAll();
             about();
@@ -535,9 +601,11 @@ function setLangEn()
             break;
 
         case Section.HardDisk:
-            disk_cover_img.src = 'images/disk_cover.png';
-            disk_platter_img.src = 'images/unskewed_platter.png';
-            sector_text_img.src = 'images/sector_text.png';
+            disk_cover_img.src = 'images/others/disk_cover_en.png';
+            disk_platter_img.src = 'images/platters/platter_presentation_en.png';
+            actuator_text_img.src = 'images/text_buttons/actuator_text_en.png';
+            track_text_img.src = 'images/text_buttons/track_text_en.png';
+            platter_text_img.src = 'images/text_buttons/platter_text_en.png';
             break;
 
         default:
