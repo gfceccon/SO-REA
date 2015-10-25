@@ -73,7 +73,11 @@ var disk_platter_inst = false;
 var disk_actuator_inst = false;
 var sector_text_inst = false;
 
-var paragraph;
+var content;
+var skew_table;
+var circle_track0;
+var circle_track1;
+var circle_track2;
 
 var stop_anim = false;
 
@@ -145,7 +149,7 @@ function initialize()
     {
         disk_platter_inst.setElement(disk_platter_img);
     }
-    disk_platter_img.src = 'images/disk_platter.png';
+    disk_platter_img.src = 'images/skewed_platter.png';
 
     sector_text_img = new Image();
     sector_text_img.onload = function ()
@@ -183,14 +187,19 @@ function initialize()
             stop: function (event, ui)
             {
                 rpm = ui.value;
-                platterAnimate(rpm, 0, 0);
+                platterAnimate(rpm);
             }
         });
     rpm_slider.hide();
 
-    paragraph = $("#subtitle");
-
-    canvas = new fabric.Canvas('canvas',
+    content = $("#content");
+	skew_table = $("#skew-table");
+	skew_table.hide();
+	circle_track0 = $("#state0");
+	circle_track1 = $("#state1");
+    circle_track2 = $("#state2");
+    
+	canvas = new fabric.Canvas('canvas',
         {
             hoverCursor: 'pointer',
             selection: false,
@@ -270,7 +279,7 @@ function hardDisk()
     canvas.insertAt(platter_path, 7, true);
 
     textAnimate();
-    platterAnimate(rpm, 0, 0);
+    platterAnimate(rpm);
     actuator_angle = 30;
     disk_actuator_inst.setAngle(30);
 
@@ -288,13 +297,14 @@ function lowLevelFormatting()
     canvas.insertAt(disk_platter_inst, 1, true);
     canvas.insertAt(disk_actuator_inst, 2, true);
 
-    platterAnimate(rpm, 0, 0);
+    platterAnimate(rpm);
     actuator_angle = 30;
     disk_actuator_inst.setAngle(30);
 
     $("#canvas").show();
     rpm_text.show();
     rpm_slider.show();
+	skew_table.show();
 }
 
 function highLevelFormatting()
@@ -306,20 +316,27 @@ function highLevelFormatting()
 }
 
 var reading = true;
-var current_track = 0;
+var cur_track = 0;
 var skew = 1;
-var platter_angle = 0;
 var platter_division = 8;
-var initial_angle = 15;
+var initial_angle = [15, 18, 24];
+var next_track = 0;
+var begin_read = 0;
 
-function platterAnimate(animation_rpm, prev_track, track)
+function get_time()
 {
-    console.log(animation_rpm);
+	return new Date().getTime();
+}
+
+function platterAnimate(animation_rpm)
+{
+	var prev_angle = 0;
+	var cur_angle = 0;
     if (stop_anim == false || rpm > 0) {
         fabric.util.animate(
             {
-                startValue: initial_angle + prev_track * prev_track * 2,
-                endValue: 360 + initial_angle + track * track * 2,
+                startValue: 0,
+                endValue: 360,
                 duration: 60000 / animation_rpm,
 
                 easing: function (t, b, c, d)
@@ -329,7 +346,30 @@ function platterAnimate(animation_rpm, prev_track, track)
 
                 onChange: function (angle)
                 {
-                    platter_angle = angle;
+					prev_angle = cur_angle;
+                    cur_angle = angle;
+					
+					var target_angle = initial_angle[cur_track] + cur_track * skew * 360 / platter_division;
+					
+					if(actuator_moving == false
+					&& cur_angle >= target_angle
+					&& target_angle > prev_angle
+					&& get_time() - begin_read >= 60000 / animation_rpm){
+                        if (reading == true) {
+                            reading = false;
+                            next_track = (next_track + 1) % 3;
+                            actuatorAnimateTo(next_track);
+                        } else {
+                            reading = true;
+							begin_read = get_time();
+							if(cur_track == 0)
+								circle_track0.attr("fill", "green");
+							else if(cur_track == 1)
+								circle_track1.attr("fill", "green");
+							else
+								circle_track2.attr("fill", "green");
+                        }
+					}
                     disk_platter_inst.setAngle(angle);
                     canvas.renderAll();
                 },
@@ -337,21 +377,7 @@ function platterAnimate(animation_rpm, prev_track, track)
                 onComplete: function ()
                 {
                     if (animation_rpm == rpm) {
-
-                        if (reading == true) {
-                            var randTrack = Math.round(Math.random() * 2);
-                            actuatorAnimateTo(randTrack);
-                            reading = false;
-                            paragraph.append("End reading " + current_track);
-                            platterAnimate(animation_rpm, track, randTrack);
-
-                        } else {
-                            reading = true;
-                            paragraph.append("Begin reading " + current_track);
-                            platterAnimate(animation_rpm, track, track);
-                        }
-
-                        paragraph.append("<br/>");
+                        platterAnimate(animation_rpm);
                     }
                 },
 
@@ -372,8 +398,6 @@ function actuatorAnimateTo(track)
     if (actuator_moving == true)
         return;
 
-    actuator_moving = true;
-
     var angle;
     if (track == 0)
         angle = 30;
@@ -382,14 +406,18 @@ function actuatorAnimateTo(track)
     else if (track == 2)
         angle = 55;
 
-    if (actuator_angle == angle) {
-        actuator_moving = false;
+    if (actuator_angle == angle)
         return;
-    }
-
+	
+    actuator_moving = true;
+	
     if (stop_anim == false) {
         var auxiliar = angle;
 
+		circle_track0.attr("fill", "red");
+		circle_track1.attr("fill", "red");
+		circle_track2.attr("fill", "red");
+		
         fabric.util.animate(
             {
                 startValue: actuator_angle,
@@ -408,15 +436,16 @@ function actuatorAnimateTo(track)
                 },
                 onComplete: function ()
                 {
-                    if (platter_angle <= skew * track * 360 / platter_division) {
-                        reading = true;
-                        paragraph.append("Begin reading " + current_track + '\n');
-                        paragraph.append("<br/>");
-                    }
-
+					if(track == 0)
+						circle_track0.attr("fill", "yellow");
+					else if(track == 1)
+						circle_track1.attr("fill", "yellow");
+					else
+						circle_track2.attr("fill", "yellow");
+					
                     actuator_angle = auxiliar;
                     actuator_moving = false;
-                    current_track = track;
+                    cur_track = track;
                 }
             });
     } else {
@@ -523,6 +552,7 @@ function hideAll()
 
     rpm_text.hide();
     rpm_slider.hide();
+	skew_table.hide();
 
     $("#text").html("");
 
