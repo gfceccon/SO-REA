@@ -144,7 +144,7 @@ function initialize()
         selectable: false
     });
 
-    fabric.Image.fromURL('images/disk_case.png', function (disk_caseImg)
+    fabric.Image.fromURL('images/others/disk_case.png', function (disk_caseImg)
     {
         disk_case_inst = disk_caseImg;
         disk_case_inst.originX = disk_case_inst.originY = 'center';
@@ -154,7 +154,7 @@ function initialize()
         disk_case_inst.top = 300;
     });
 
-    fabric.Image.fromURL('images/disk_actuator_arm.png', function (disk_actuatorImg)
+    fabric.Image.fromURL('images/others/disk_actuator_arm.png', function (disk_actuatorImg)
     {
         disk_actuator_inst = disk_actuatorImg;
         disk_actuator_inst.originX = disk_actuator_inst.originY = 'center';
@@ -164,7 +164,7 @@ function initialize()
         disk_actuator_inst.top = 350;
     });
 
-    fabric.Image.fromURL('images/track_path.png', function (track_pathImg)
+    fabric.Image.fromURL('images/paths/track_path.png', function (track_pathImg)
     {
         track_path_inst = track_pathImg;
         track_path_inst.originX = track_path_inst.originY = 'center';
@@ -174,7 +174,7 @@ function initialize()
         track_path_inst.top = 132;
     });
 
-    fabric.Image.fromURL('images/actuator_path.png', function (actuator_pathImg)
+    fabric.Image.fromURL('images/paths/actuator_path.png', function (actuator_pathImg)
     {
         actuator_path_inst = actuator_pathImg;
         actuator_path_inst.originX = actuator_path_inst.originY = 'center';
@@ -184,7 +184,7 @@ function initialize()
         actuator_path_inst.top = 390;
     });
 
-    fabric.Image.fromURL('images/platter_path.png', function (platter_pathImg)
+    fabric.Image.fromURL('images/paths/platter_path.png', function (platter_pathImg)
     {
         platter_path_inst = platter_pathImg;
         platter_path_inst.originX = platter_path_inst.originY = 'center';
@@ -201,7 +201,7 @@ function initialize()
     {
         disk_cover_inst.setElement(disk_cover_img);
     }
-    disk_cover_img.src = 'images/disk_cover_pt.png';
+    disk_cover_img.src = 'images/others/disk_cover_pt.png';
 
     disk_platter_img = new Image();
     disk_platter_img.onload = function ()
@@ -215,7 +215,7 @@ function initialize()
     {
         actuator_text_inst.setElement(actuator_text_img);
     }
-    actuator_text_img.src = 'images//text_buttons/actuator_text_pt.png';
+    actuator_text_img.src = 'images/text_buttons/actuator_text_pt.png';
 
     track_text_img = new Image();
     track_text_img.onload = function ()
@@ -315,6 +315,7 @@ function lowLevelFormatting()
 {
     stop_anim = false;
     currentSection = Section.Other;
+    disk_platter_img.src = 'images/platters/unskewed_platter.png';
 
     canvas.insertAt(disk_case_inst, 0, true);
     canvas.insertAt(disk_platter_inst, 1, true);
@@ -510,7 +511,7 @@ function setLangPt()
             break;
 
         case Section.HardDisk:
-            disk_cover_img.src = 'images/disk_cover_pt.png';
+            disk_cover_img.src = 'images/others/disk_cover_pt.png';
             disk_platter_img.src = 'images/platters/platter_presentation_pt.png';
             actuator_text_img.src = 'images/text_buttons/actuator_text_pt.png';
             track_text_img.src = 'images/text_buttons/track_text_pt.png';
@@ -549,7 +550,7 @@ function setLangEn()
             break;
 
         case Section.HardDisk:
-            disk_cover_img.src = 'images/disk_cover_en.png';
+            disk_cover_img.src = 'images/others/disk_cover_en.png';
             disk_platter_img.src = 'images/platters/platter_presentation_en.png';
             actuator_text_img.src = 'images/text_buttons/actuator_text_en.png';
             track_text_img.src = 'images/text_buttons/track_text_en.png';
