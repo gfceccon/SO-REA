@@ -337,12 +337,9 @@ function hardDisk()
 
     canvas.insertAt(disk_cover_inst, 9, true);
 
-<<<<<<< HEAD
+
     textAnimate();
     platterAnimate(rpm);
-=======
-    platterAnimate(rpm, 0, 0);
->>>>>>> origin/master
     actuator_angle = 30;
     disk_actuator_inst.setAngle(30);
 
