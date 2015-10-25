@@ -250,6 +250,12 @@ function initialize()
     rpm_text.hide();
 
     rpm_slider = $("#selector");
+    content = $("#content");
+	skew_table = $("#skew-table");
+	circle_track0 = $("#state0");
+	circle_track1 = $("#state1");
+    circle_track2 = $("#state2");
+	
     rpm_slider.slider(
     {
         min: 0,
@@ -258,6 +264,10 @@ function initialize()
         step: 4,
         slide: function (event, ui)
 			{
+				
+				circle_track0.attr("fill", "red");
+				circle_track1.attr("fill", "red");
+				circle_track2.attr("fill", "red");
                 if (lang == Languages._enUs)
                     rpm_text.html("Disk Rotation Speed (RPM): " + ui.value);
                 else
@@ -272,14 +282,9 @@ function initialize()
 				platterAnimate(rpm);
 			}
         });
+		
     rpm_slider.hide();
-
-    content = $("#content");
-	skew_table = $("#skew-table");
 	skew_table.hide();
-	circle_track0 = $("#state0");
-	circle_track1 = $("#state1");
-    circle_track2 = $("#state2");
     
 	canvas = new fabric.Canvas('canvas',
         {
@@ -388,6 +393,7 @@ var platter_division = 8;
 var initial_angle = [15, 18, 24];
 var next_track = 0;
 var begin_read = 0;
+var epsilon = 10;
 
 function get_time()
 {
@@ -418,7 +424,7 @@ function platterAnimate(animation_rpm)
 					if(actuator_moving == false
 					&& cur_angle >= target_angle
 					&& target_angle > prev_angle
-					&& get_time() - begin_read >= 60000 / animation_rpm){
+					&& get_time() - begin_read >= 60000 / animation_rpm - epsilon){
 						if (reading == true) {
 							reading = false;
 							next_track = (next_track + 1) % 3;
