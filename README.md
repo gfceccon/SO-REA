@@ -11,7 +11,7 @@ The second button is "Hard Disk". Here you can observe how a hard disk is intern
 The third button is the "Low Level Formatting" button.  
 The fourth button is the "High Level Formatting" button.  
 The fifth button leads you to the "About" section, which contains text similar to this one, explaining how the application is organized and what you will find in each of the sections.  
-The last button is the "Credits" button, where you can see which studends developed the application, as well as the supervisioning professor.  
+The last button is the "Credits" button, where you can see which students developed the application, as well as the supervisioning professor.  
 Lastly, on the bottom corner of the menu, the language selection flags are displayed. You can set the application language to portuguese by clicking on the Brazil flag, or set it to english by clicking on the United States flag.  
 
 ### Credits
