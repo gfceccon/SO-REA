@@ -19,20 +19,40 @@ var about_en = "About";
 var credits_pt = "Créditos";
 var credits_en = "Credits";
 
-var about_text_pt = "<p>Nosso REA é tardado.</p>";
-var about_text_en = "<p>Our OER is late...</p>";
+var about_text_pt = "<p class=\"title\">Sobre</p>" +
+    "<p>Esta aplicação foi desenvolvida pensando-se na facilidade de uso. Ao entrar na aplicação, é possível ver um menu lateral, que contém todas as seções da aplicação, bem como as bandeiras de seleção de idioma.</p>" +
+    "<p>O primeiro botão é o \"Iniciar\", que simplesmente passa por todas as seções da aplicação de forma linear. Ideal para quem nunca utilizou a aplicação e deseja experimentar tudo o que ela tem a oferecer.</p>" +
+    "<p>O segundo botão é o de \"Disco Rígido\". Nesta seção, é possível observar como está internamente organizado o disco rígido, com suas principais partes nomeadas. A figura X mostra uma captura de tela com o estado da aplicação ao entrar nesta seção.<br>" +
+    "<image src=\"images/screenshots/hard_disk_pt.png\" class=\"screenshot\"></image></br>" +
+    "Figura X - Visão da aplicação dentro da seção \"Disco Rígido\".</p>" +
+    "<p>O terceiro botão é o de \"Formatação de Baixo Nível\". INSIRA TEXTO AQUI</p>" +
+    "<p>O quarto botão é o de \"Formatação de Alto Nível\". INSIRA TEXTO AQUI</p>" +
+    "<p>O quinto botão entra na seção \"Sobre\", que possui um texto similar a este, explicando como a aplicação está organizada e o que se encontra em cada seção.</p>" +
+    "<p>O último botão é o botão de \"Créditos\", no qual pode-se ver quais foram os alunos que desenvolveram a aplicação, e o professor orientador do desenvolvimento.</p>" +
+    "<p>Por fim, no canto inferior do menu, estão localizadas as bandeiras de seleção de idiomas. Clicando na bandeira do Brasil, o idioma é alterado para português. Clicando na bandeira dos Estados Unidos, o idioma é alterado para inglês.</p>";
+var about_text_en = "<p class=\"title\">About</p>" +
+    "<p>This application was developed with ease of use in our minds. When first entering it, you can see a lateral menu, which contains all the available sections of the application, as well as the language selection flags.</p>" +
+    "<p>The first button is \"Begin\", which will simply pass linearly through all sections of the application. Recommended for those who never used the application before, and want to experience everything it has to offer.</p>" +
+    "<p>The second button is \"Hard Disk\". Here you can observe how a hard disk is internally organized, with its main components named. Figure X shows a screenshot with the state of the application after entering that section.<br>" +
+    "<image src=\"images/screenshots/hard_disk_en.png\" class=\"screenshot\"></image><br>" +
+    "Figure X - Application state inside \"Hard Disk\" section.</p>" +
+    "<p>The third button is the \"Low Level Formatting\" button.</p>" +
+    "<p>The fourth button is the \"High Level Formatting\" button.</p>" +
+    "<p>The fifth button leads you to the \"About\" section, which contains text similar to this one, explaining how the application is organized and what you will find in each of the sections.</p>" +
+    "<p>The last button is the \"Credits\" button, where you can see which students developed the application, as well as the supervisioning professor.</p>" +
+    "<p>Lastly, on the bottom corner of the menu, the language selection flags are displayed. You can set the application language to portuguese by clicking on the Brazil flag, or set it to english by clicking on the United States flag.</p>";
 
-var credits_text_pt = "<p>Créditos:</p>" +
+var credits_text_pt = "<p class=\"title\">Créditos</p>" +
     "<p>Esta aplicação informativa foi desenvolvida como Recurso Educacional Aberto (REA) dentro da disciplina de Sistemas Operacionais I.<br>" +
     "Seu desenvolvimento foi supervisionado pelo professor Paulo Sérgio Lopes de Souza, e implementado pelos alunos:</p>" +
     "<p>Danilo Zecchin Nery<br>" +
     "Guilherme Zanardo Borduchi<br>" +
     "Gustavo Ferreira Ceccon<br>" +
     "Lucas Silveira de Moura</p>" +
-    "<p>Universidade de São Paulo, Institudo de Ciências Matemáticas e de Computação (ICMC - USP).<br>" +
+    "<p>Universidade de São Paulo, Instituto de Ciências Matemáticas e de Computação (ICMC - USP).<br>" +
     "São Carlos - SP, Brasil.<br>" +
     "Segundo semestre de 2015.</p>";
-var credits_text_en = "<p>Credits:</p>" +
+var credits_text_en = "<p class=\"title\">Credits</p>" +
     "<p>This informative application was developed as an Open Educational Resource (OER), within the discipline of Operational Systems I.<br>" +
     "Its development was supervised by professor Paulo Sérgio Lopes de Souza, and implemented by the students:</p>" +
     "<p>Danilo Zecchin Nery<br>" +
@@ -69,7 +89,8 @@ var disk_cover_inst = false;
 var disk_platter_inst = false;
 var disk_actuator_inst = false;
 var actuator_text_inst = false;
-var actuator_path_inst = false;
+var actuator_arm_text_inst = false;
+var actuator_arm_path_inst = false;
 var track_text_inst = false;
 var track_path_inst = false;
 var platter_text_inst = false;
@@ -79,6 +100,7 @@ var platter_path_inst = false;
 var disk_cover_img = false;
 var disk_platter_img = false;
 var actuator_text_img = false;
+var actuator_arm_text_img = false;
 var track_text_img = false;
 var platter_text_img = false
 
@@ -124,6 +146,18 @@ function initialize()
     {
         left: 700,
         top: 450,
+        originX: 'center',
+        originY: 'center',
+        opacity: 0.85,
+        lockMovementX: true,
+        lockMovementY: true,
+        selectable: false
+    });
+
+    actuator_arm_text_inst = new fabric.Image('images/text_buttons/actuator_arm_text_pt.png',
+    {
+        left: 697,
+        top: 220,
         originX: 'center',
         originY: 'center',
         opacity: 0.85,
@@ -186,14 +220,14 @@ function initialize()
         track_path_inst.top = 132;
     });
 
-    fabric.Image.fromURL('images/paths/actuator_path.png', function (actuator_pathImg)
+    fabric.Image.fromURL('images/paths/actuator_arm_path.png', function (actuator_arm_pathImg)
     {
-        actuator_path_inst = actuator_pathImg;
-        actuator_path_inst.originX = actuator_path_inst.originY = 'center';
-        actuator_path_inst.lockMovementX = actuator_path_inst.lockMovementY = true;
-        actuator_path_inst.selectable = false;
-        actuator_path_inst.left = 625;
-        actuator_path_inst.top = 390;
+        actuator_arm_path_inst = actuator_arm_pathImg;
+        actuator_arm_path_inst.originX = actuator_arm_path_inst.originY = 'center';
+        actuator_arm_path_inst.lockMovementX = actuator_arm_path_inst.lockMovementY = true;
+        actuator_arm_path_inst.selectable = false;
+        actuator_arm_path_inst.left = 592;
+        actuator_arm_path_inst.top = 260;
     });
 
     fabric.Image.fromURL('images/paths/platter_path.png', function (platter_pathImg)
@@ -228,6 +262,13 @@ function initialize()
         actuator_text_inst.setElement(actuator_text_img);
     }
     actuator_text_img.src = 'images/text_buttons/actuator_text_pt.png';
+
+    actuator_arm_text_img = new Image();
+    actuator_arm_text_img.onload = function ()
+    {
+        actuator_arm_text_inst.setElement(actuator_arm_text_img);
+    }
+    actuator_arm_text_img.src = 'images/text_buttons/actuator_arm_text_pt.png';
 
     track_text_img = new Image();
     track_text_img.onload = function ()
@@ -267,62 +308,37 @@ function initialize()
         value: rpm,
         step: 4,
         slide: function (event, ui)
-			{
-				
-				circle_track0.attr("fill", "red");
-				circle_track1.attr("fill", "red");
-				circle_track2.attr("fill", "red");
-                if (lang == Languages._enUs)
-                    rpm_text.html("Disk Rotation Speed (RPM): " + ui.value);
-                else
-                    rpm_text.html("Velocidade do Disco (RPM): " + ui.value);
-                actuator_angle = 30;
-                disk_actuator_inst.setAngle(30);
-                rpm = 0;
-            },
+		{
+			
+			circle_track0.attr("fill", "red");
+			circle_track1.attr("fill", "red");
+			circle_track2.attr("fill", "red");
+            if (lang == Languages._enUs)
+                rpm_text.html("Disk Rotation Speed (RPM): " + ui.value);
+            else
+                rpm_text.html("Velocidade do Disco (RPM): " + ui.value);
+            actuator_angle = 30;
+            disk_actuator_inst.setAngle(30);
+            rpm = 0;
+        },
 		stop: function (event, ui)
-			{
-				rpm = ui.value;
-				actuatorAnimateTo(0);
-				platterAnimateSkew(rpm);
-			}
-        });
+		{
+			rpm = ui.value;
+			actuatorAnimateTo(0);
+			platterAnimateSkew(rpm);
+		}
+    });
     
 	canvas = new fabric.Canvas('canvas',
-        {
-            hoverCursor: 'pointer',
-            selection: false,
-            perPixelTargetFind: true,
-            targetFindTolerance: 5,
-            renderOnAddRemove: false
-        });
+    {
+        hoverCursor: 'pointer',
+        selection: false,
+        perPixelTargetFind: true,
+        targetFindTolerance: 5,
+        renderOnAddRemove: false
+    });
+
 	hideAll();
-}
-
-function textAnimate()
-{
-    fabric.util.animate(
-        {
-            startValue: 0,
-            endValue: 360,
-            duration: 60000 / rpm,
-
-            easing: function (t, b, c, d)
-            {
-                return c * t / d + b;
-            },
-
-            onChange: function (angle)
-            {
-                angle = fabric.util.degreesToRadians(angle);
-
-                var x = 313 + 230 * Math.cos(angle);
-                var y = 303 + 230 * Math.sin(angle);
-
-                sector_text_inst.set({left: x, top: y}).setCoords();
-            },
-            onComplete: textAnimate
-        });
 }
 
 function hardDisk()
@@ -341,17 +357,16 @@ function hardDisk()
     canvas.insertAt(disk_actuator_inst, 2, true);
 
     canvas.insertAt(actuator_text_inst, 3, true);
-    canvas.insertAt(track_text_inst, 4, true);
-    canvas.insertAt(platter_text_inst, 5, true);
+    canvas.insertAt(actuator_arm_text_inst, 4, true);
+    canvas.insertAt(track_text_inst, 5, true);
+    canvas.insertAt(platter_text_inst, 6, true);
 
-    canvas.insertAt(actuator_path_inst, 6, true);
-    canvas.insertAt(track_path_inst, 7, true);
-    canvas.insertAt(platter_path_inst, 8, true);
+    canvas.insertAt(actuator_arm_path_inst, 7, true);
+    canvas.insertAt(track_path_inst, 8, true);
+    canvas.insertAt(platter_path_inst, 9, true);
 
-    canvas.insertAt(disk_cover_inst, 9, true);
+    canvas.insertAt(disk_cover_inst, 10, true);
 
-
-    textAnimate();
 	rpm = 8;
 	rpm_slider.slider("value", 8);
 	actuatorAnimateTo(0);
@@ -413,55 +428,55 @@ function platterAnimateSkew(animation_rpm)
 	var cur_angle = 0;
     if (stop_anim == false || rpm > 0) {
         fabric.util.animate(
-            {
-                startValue: 0,
-                endValue: 360,
-                duration: 60000 / animation_rpm,
-				easing: function (t, b, c, d)
-				{
-					return c * t / d + b;
-				},
-				onChange: function (angle)
-				{
-					prev_angle = cur_angle;
-					cur_angle = angle;
-					
-					var target_angle = initial_angle[cur_track] + cur_track * skew * 360 / platter_division;
-					
-					if(actuator_moving == false
-					&& cur_angle >= target_angle
-					&& target_angle > prev_angle
-					&& get_time() - begin_read >= 60000 / animation_rpm - epsilon){
-						if (reading == true) {
-							reading = false;
-							next_track = (next_track + 1) % 3;
-							actuatorAnimateTo(next_track);
-						} else {
-							reading = true;
-							begin_read = get_time();
-							if(cur_track == 0)
-								circle_track0.attr("fill", "green");
-							else if(cur_track == 1)
-								circle_track1.attr("fill", "green");
-							else
-								circle_track2.attr("fill", "green");
-						}
+        {
+            startValue: 0,
+            endValue: 360,
+            duration: 60000 / animation_rpm,
+			easing: function (t, b, c, d)
+			{
+				return c * t / d + b;
+			},
+			onChange: function (angle)
+			{
+				prev_angle = cur_angle;
+				cur_angle = angle;
+				
+				var target_angle = initial_angle[cur_track] + cur_track * skew * 360 / platter_division;
+				
+				if(actuator_moving == false
+				&& cur_angle >= target_angle
+				&& target_angle > prev_angle
+				&& get_time() - begin_read >= 60000 / animation_rpm - epsilon){
+					if (reading == true) {
+						reading = false;
+						next_track = (next_track + 1) % 3;
+						actuatorAnimateTo(next_track);
+					} else {
+						reading = true;
+						begin_read = get_time();
+						if(cur_track == 0)
+							circle_track0.attr("fill", "green");
+						else if(cur_track == 1)
+							circle_track1.attr("fill", "green");
+						else
+							circle_track2.attr("fill", "green");
 					}
-					disk_platter_inst.setAngle(angle);
-					canvas.renderAll();
-				},
-				onComplete: function ()
-				{
-					if (animation_rpm == rpm)
-					{
-						platterAnimateSkew(animation_rpm);
-					}
-				},
-
-				abort: function ()
-				{
-					return (animation_rpm != rpm || stop_anim);
 				}
+				disk_platter_inst.setAngle(angle);
+				canvas.renderAll();
+			},
+			onComplete: function ()
+			{
+				if (animation_rpm == rpm)
+				{
+					platterAnimateSkew(animation_rpm);
+				}
+			},
+
+			abort: function ()
+			{
+				return (animation_rpm != rpm || stop_anim);
+			}
         });
     }
 }
@@ -478,48 +493,47 @@ function platterAnimateInter(animation_rpm)
 	
     if (stop_anim == false || rpm > 0) {
         fabric.util.animate(
-            {
-                startValue: 0,
-                endValue: 360,
-                duration: 60000 / animation_rpm,
-				easing: function (t, b, c, d)
+        {
+            startValue: 0,
+            endValue: 360,
+            duration: 60000 / animation_rpm,
+			easing: function (t, b, c, d)
+			{
+				return c * t / d + b;
+			},
+			onChange: function (angle)
+			{
+				prev_angle = cur_angle;
+				cur_angle = angle;
+				var target_angle = sect_target * 45;
+				
+				if(cur_angle >= target_angle && target_angle >= prev_angle)
 				{
-					return c * t / d + b;
-				},
-				onChange: function (angle)
-				{
-					prev_angle = cur_angle;
-					cur_angle = angle;
-					var target_angle = sect_target * 45;
-					
-					if(cur_angle >= target_angle
-					&& target_angle >= prev_angle)
+					if(reading == true)
+						reading = false;
+					else
 					{
-						if(reading == true)
-							reading = false;
-						else
-						{
-							var rgb = "rgb(" + sect_color_red[sect_target - 1] + ", "  + sect_color_green[sect_target - 1] + ", "  + sect_color_blue[sect_target - 1] + ")";
-							buffer.attr("fill", rgb);
-							sect_target = (sect_target + 2) % platter_division;
-							reading = true;
-						}
+						var rgb = "rgb(" + sect_color_red[sect_target - 1] + ", "  + sect_color_green[sect_target - 1] + ", "  + sect_color_blue[sect_target - 1] + ")";
+						buffer.attr("fill", rgb);
+						sect_target = (sect_target + 2) % platter_division;
+						reading = true;
 					}
-					disk_platter_inst.setAngle(angle + initial_angle[1]);
-					canvas.renderAll();
-				},
-				onComplete: function ()
-				{
-					if (animation_rpm == rpm)
-					{
-						platterAnimateInter(animation_rpm);
-					}
-				},
-
-				abort: function ()
-				{
-					return (animation_rpm != rpm || stop_anim);
 				}
+				disk_platter_inst.setAngle(angle + initial_angle[1]);
+				canvas.renderAll();
+			},
+			onComplete: function ()
+			{
+				if (animation_rpm == rpm)
+				{
+					platterAnimateInter(animation_rpm);
+				}
+			},
+
+			abort: function ()
+			{
+				return (animation_rpm != rpm || stop_anim);
+			}
         });
     }
 }
@@ -642,6 +656,7 @@ function setLangPt()
             disk_cover_img.src = 'images/others/disk_cover_pt.png';
             disk_platter_img.src = 'images/platters/platter_presentation_pt.png';
             actuator_text_img.src = 'images/text_buttons/actuator_text_pt.png';
+            actuator_arm_text_img.src = 'images/text_buttons/actuator_arm_text_pt.png';
             track_text_img.src = 'images/text_buttons/track_text_pt.png';
             platter_text_img.src = 'images/text_buttons/platter_text_pt.png';
             break;
@@ -681,6 +696,7 @@ function setLangEn()
             disk_cover_img.src = 'images/others/disk_cover_en.png';
             disk_platter_img.src = 'images/platters/platter_presentation_en.png';
             actuator_text_img.src = 'images/text_buttons/actuator_text_en.png';
+            actuator_arm_text_img.src = 'images/text_buttons/actuator_arm_text_en.png';
             track_text_img.src = 'images/text_buttons/track_text_en.png';
             platter_text_img.src = 'images/text_buttons/platter_text_en.png';
             break;
