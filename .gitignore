@@ -42,6 +42,9 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-# IntelliJ Project Indexers
+# GIMP Project Indexers
+images/platters/*.xcf
+
+# IntelliJ Indexers
 SO-REA.iml
 .idea/

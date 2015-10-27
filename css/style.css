@@ -1,61 +1,93 @@
-.languages
-{ 
-	position: absolute;
+.languages {
+    position: absolute;
     bottom: 0;
     left: 25%;
-	width: 100%;
+    width: 100%;
 }
 
-.flag
-{
-	width: 64px;
-	height: 64px;
+.flag {
+    width: 64px;
+    height: 64px;
 }
 
-.navigation
-{ 
-	position: absolute;
+.navigation {
+    position: absolute;
     left: 25%;
-	width: 100%;
+    width: 100%;
 }
 
-.navbutton
-{ 
-	width: 64px;
-	height: 64px;
+.navbutton {
+    width: 64px;
+    height: 64px;
 }
 
-.screenshot
-{
-	width: 50%;
-	height: 50%;
+.screenshot {
+    width: 50%;
+    height: 50%;
 }
 
-.title
-{
-	text-align: center;
-	font-size: 200%;
+.title {
+    text-align: center;
+    font-size: 200%;
 }
 
-#skew-table, #inter-table
-{
-	border: 1px solid black;
+#skew-table, #inter-table {
+    border: 1px solid black;
 }
 
-#skew-table th
-{
-	border: 1px solid black;
-	text-align: center;
-	padding: 0px 5px;
+#skew-table th {
+    border: 1px solid black;
+    text-align: center;
+    padding: 0px 5px;
 }
 
-#skew-table td
-{
-	border: 1px solid black;
-	padding: 0px 5px;
+#skew-table td {
+    border: 1px solid black;
+    padding: 0px 5px;
 }
 
-#inter-table th
-{
-	text-align: center;
+#inter-table th {
+    text-align: center;
+}
+
+#dpimg {
+    z-index: 1;
+    position: fixed;
+    display: inline-block;
+
+    padding: 6px;
+    border-radius: 100%;
+    border: 2px dashed black;
+}
+
+#part1 {
+    top: 243px;
+    left: 32.9%;
+}
+
+#part2 {
+    top: 371px;
+    left: 30%;
+}
+
+#part3 {
+    top: 435px;
+    left: 24.5%;
+}
+
+#part4 {
+    top: 192px;
+    left: 16.45%;
+}
+
+.pentry {
+    z-index: 2;
+    height: 32px;
+    width: 150px;
+    position: fixed;
+
+    text-align: center;
+    display: inline-block;
+    background-color: darkcyan;
+    border: 5px outset darkcyan;
 }
