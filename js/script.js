@@ -117,10 +117,10 @@ var disk_platter_img = false;
 var actuator_text_img = false;
 var actuator_arm_text_img = false;
 var track_text_img = false;
-var platter_text_img = false
+var platter_text_img = false;
 
 var content;
-var main_text
+var main_text;
 var skew_table;
 var circle_track0;
 var circle_track1;
@@ -254,37 +254,37 @@ function initialize() {
     disk_cover_img = new Image();
     disk_cover_img.onload = function () {
         disk_cover_inst.setElement(disk_cover_img);
-    }
+    };
     disk_cover_img.src = 'images/others/disk_cover_pt.png';
 
     disk_platter_img = new Image();
     disk_platter_img.onload = function () {
         disk_platter_inst.setElement(disk_platter_img);
-    }
+    };
     disk_platter_img.src = 'images/platters/disk_platter.png';
 
     actuator_text_img = new Image();
     actuator_text_img.onload = function () {
         actuator_text_inst.setElement(actuator_text_img);
-    }
+    };
     actuator_text_img.src = 'images/text_buttons/actuator_text_pt.png';
 
     actuator_arm_text_img = new Image();
     actuator_arm_text_img.onload = function () {
         actuator_arm_text_inst.setElement(actuator_arm_text_img);
-    }
+    };
     actuator_arm_text_img.src = 'images/text_buttons/actuator_arm_text_pt.png';
 
     track_text_img = new Image();
     track_text_img.onload = function () {
         track_text_inst.setElement(track_text_img);
-    }
+    };
     track_text_img.src = 'images/text_buttons/track_text_pt.png';
 
     platter_text_img = new Image();
     platter_text_img.onload = function () {
         platter_text_inst.setElement(platter_text_img);
-    }
+    };
     platter_text_img.src = 'images/text_buttons/platter_text_pt.png';
     // --- END IMAGES BLOCK --- //
 
@@ -505,16 +505,16 @@ function highLevelFormatting() {
     $pa[2].hide().appendTo("#hlf").delay(300).fadeIn("fast");
     $pa[3].hide().appendTo("#hlf").delay(400).fadeIn("fast");
 
-    $ptable.appendTo("#hlf").delay(500).animate({top: "-=60%"}, 300);
+    $ptable.appendTo("#hlf").delay(500).animate({top: "-=1420px"}, 300);
     $pt[0].appendTo("#p_table");
     $pt[1].appendTo("#p_table");
     $pt[2].appendTo("#p_table");
     $pt[3].appendTo("#p_table");
     $pt[4].appendTo("#p_table");
 
-    $navl.appendTo("#hlf").delay(650).animate({top: "-=30%"}, 300);
-    $navr.appendTo("#hlf").delay(650).animate({top: "-=30%"}, 300);
-    $blast.appendTo("#hlf").delay(600).animate({top: "-=30%"}, 300);
+    $navl.appendTo("#hlf").delay(650).animate({top: "-=1110"}, 300);
+    $navr.appendTo("#hlf").delay(650).animate({top: "-=1110"}, 300);
+    $blast.appendTo("#hlf").delay(600).animate({top: "-=1110"}, 300);
 
     // Behaviour
     var step = 4;

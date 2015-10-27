@@ -52,60 +52,59 @@
 
 #num_platter_base {
     z-index: 1;
-    position: fixed;
     display: inline-block;
-
+    position: absolute;
+    left: 0px;
+    top: 0px;
     padding: 6px;
     border-radius: 100%;
     border: 2px dashed black;
 }
 
 #p_sample1 {
-    top: 243px;
-    left: 32.9%;
+    top: 213px;
+    left: 346px;
 }
 
 #p_sample2 {
-    top: 371px;
-    left: 30%;
+    top: 341px;
+    left: 291px;
 }
 
 #p_sample3 {
-    top: 435px;
-    left: 24.5%;
+    top: 405px;
+    left: 185px;
 }
 
 #p_sample4 {
-    top: 192px;
-    left: 16.45%;
+    top: 162px;
+    left: 30px;
 }
 
 .p_entry {
     z-index: 2;
     width: 150px;
     height: 32px;
-    position: fixed;
+    display: inline-block;
+    position: absolute;
 
     color: white;
     text-align: center;
-    display: inline-block;
     font-size: 14px;
     font-weight: bold;
     font-family: Courier, cursive;
     border: 5px outset darkcyan;
     background-color: darkcyan;
 }
+
 #p_table {
-    z-index: 3;
     width: 500px;
     height: 300px;
-    position: fixed;
     display: inline-block;
-
-    top: 118%;
-    left: 15.55%;
+    position: absolute;
+    top: 1970px;
+    left: 15px;
     padding: 10px;
-
     color: white;
     font-size: 18px;
     font-family: Courier, cursive;
@@ -128,9 +127,9 @@
 .p_action_button {
     width: 120px;
     height: 50px;
-    position: fixed;
     text-align: center;
     display: inline-block;
+    position: absolute;
     color: white;
     font-size: 20px;
     font-weight: bold;
@@ -140,20 +139,20 @@
 }
 
 #p_navl {
-    top: 120%;
-    left: 15.55%;
+    top: 1970px;
+    left: 15px;
     cursor: pointer;
 }
 
 #p_navr {
-    top: 120%;
-    left: 35.4%;
+    top: 1970px;
+    left: 395px;
     opacity: 0.25;
     cursor: default;
 }
 
 #p_blast {
-    top: 120%;
-    left: 25.475%;
+    top: 1970px;
+    left: 205px;
     cursor: pointer;
 }
