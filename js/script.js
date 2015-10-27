@@ -138,7 +138,9 @@ var circle_track2;
 var inter_table;
 var buffer;
 
-var stop_anim = false;
+var stop_skew = false;
+var stop_inter = false;
+var stop_actuator = false;
 
 initialize();
 
@@ -322,21 +324,64 @@ function initialize() {
             step: 4,
             slide: function (event, ui) {
 
-                circle_track0.attr("fill", "red");
+                circle_track0.attr("fill", "green");
                 circle_track1.attr("fill", "red");
                 circle_track2.attr("fill", "red");
-                if (lang == Languages._enUs)
-                    rpm_text.html("Disk Rotation Speed (RPM): " + ui.value);
-                else
-                    rpm_text.html("Velocidade do Disco (RPM): " + ui.value);
-                actuator_angle = 30;
-                disk_actuator_inst.setAngle(30);
+                changeRpmText(ui.value);
                 rpm = 0;
+                cur_track = 0;
+                disk_actuator_inst.setAngle(actuator_angles[0]);
+				stop_skew = true;
+				stop_inter = true;
+				stop_actuator = true;
             },
             stop: function (event, ui) {
+				if(rpm == ui.value)
+					return;
                 rpm = ui.value;
-                actuatorAnimateTo(0);
-                platterAnimateSkew(rpm);
+                switch (currentSection) {
+					case Section.HD:
+						stop_skew = false;
+						stop_actuator = false;
+						disk_actuator_inst.setAngle(actuator_angles[0]);
+						cur_track = 0;
+						skew = 0;
+						platterAnimateSkew(rpm);
+						break;
+
+					case Section.LLFsk0:
+						stop_skew = false;
+						stop_actuator = false;
+						disk_actuator_inst.setAngle(actuator_angles[0]);
+						cur_track = 0;
+						skew = 0;
+						platterAnimateSkew(rpm);
+						break;
+
+					case Section.LLFsk1:
+						stop_inter = false;
+						disk_actuator_inst.setAngle(actuator_angles[0]);
+						cur_track = 0;
+						skew = 1;
+						platterAnimateSkew(rpm);
+						break;
+
+					case Section.LLFil0:
+						stop_inter = false;
+						disk_actuator_inst.setAngle(actuator_angles[1]);
+						cur_track = 1;
+						platterAnimateInter(rpm, 2, 0, uninter_local, uninter_size, uninter_color_r, uninter_color_g, uninter_color_b);
+						break;
+
+					case Section.LLFil1:
+						disk_actuator_inst.setAngle(actuator_angles[1]);
+						cur_track = 1;
+						platterAnimateInter(rpm, 1, 0, inter1_local, inter1_size, inter1_color_r, inter1_color_g, inter1_color_b);
+						break;
+						
+					default:
+						break;
+				}
             }
         });
 
@@ -352,6 +397,15 @@ function initialize() {
     hideAll();
     $("#previous-button").hide();
     $("#next-button").hide();
+}
+
+function changeRpmText(cur_rpm)
+{
+	
+	if (lang == Languages._enUs)
+		rpm_text.html("Disk Rotation Speed (RPM): " + cur_rpm);
+	else
+		rpm_text.html("Velocidade do Disco (RPM): " + cur_rpm);
 }
 
 function beginPresentation() {
@@ -461,7 +515,9 @@ function navPrev() {
 }
 
 function hardDisk() {
-    stop_anim = false;
+    stop_skew = false;
+	stop_inter = true;
+	stop_actuator = false;
     currentSection = Section.HD;
     disk_cover_inst.left = 35;
 
@@ -487,7 +543,10 @@ function hardDisk() {
 
     rpm = 8;
     rpm_slider.slider("value", 8);
-    actuatorAnimateTo(0);
+	changeRpmText(rpm);
+	disk_actuator_inst.setAngle(actuator_angles[0]);
+	cur_track = 0;
+	skew = 0;
     platterAnimateSkew(rpm);
 
     $("#canvas").show();
@@ -497,30 +556,81 @@ function hardDisk() {
 
 function lowLevelFormatting(section)
 {
-	stop_anim = false;
+    stop_skew = true;
+	stop_inter = true;
+    stop_actuator = true;
+	
       
 	switch (section)
 	{
 		case Section.LLFsk0:
 			currentSection = Section.LLFsk0;
 			disk_platter_img.src = 'images/platters/unskewed_platter.png';
+			rpm_text.show();
+			rpm_slider.show();
+			skew_table.show();
+			
+			stop_skew = false;
+			stop_actuator = false;
+			rpm = 8;
+			rpm_slider.slider("value", 8);
+			changeRpmText(rpm);
+			disk_actuator_inst.setAngle(actuator_angles[0]);
+			cur_track = 0;
 			skew = 0;
+			platterAnimateSkew(rpm);
 		break;
 
 		case Section.LLFsk1:
 			currentSection = Section.LLFsk1;
 			disk_platter_img.src = 'images/platters/skewed_platter.png';
+			rpm_text.show();
+			rpm_slider.show();
+			skew_table.show();
+			
+			stop_skew = false;
+			stop_actuator = false;
+			rpm = 12;
+			rpm_slider.slider("value", 12);
+			changeRpmText(rpm);
+			disk_actuator_inst.setAngle(actuator_angles[0]);
+			cur_track = 0;
 			skew = 1;
+			platterAnimateSkew(rpm);
 		break;
 
 		case Section.LLFil0:
 			currentSection = Section.LLFil0;
 			disk_platter_img.src = 'images/platters/uninterleaved_platter.png';
+			rpm_text.show();
+			rpm_slider.show();
+			inter_table.show();
+			
+			stop_inter = false;
+			rpm = 16;
+			rpm_slider.slider("value", 16);
+			changeRpmText(rpm);
+			disk_actuator_inst.setAngle(actuator_angles[1]);
+			cur_track = 1;
+			sect_count = 0;
+			platterAnimateInter(rpm, 2, 0, uninter_local, uninter_size, uninter_color_r, uninter_color_g, uninter_color_b);
 		break;
 
 		case Section.LLFil1:
 			currentSection = Section.LLFil1;
 			disk_platter_img.src = 'images/platters/interleaved_platter.png';
+			rpm_text.show();
+			rpm_slider.show();
+			inter_table.show();
+			
+			stop_inter = false;
+			rpm = 12;
+			rpm_slider.slider("value", 12);
+			changeRpmText(rpm);
+			disk_actuator_inst.setAngle(actuator_angles[1]);
+			cur_track = 1;
+			sect_count = 0;
+			platterAnimateInter(rpm, 1, 0, inter1_local, inter1_size, inter1_color_r, inter1_color_g, inter1_color_b);
 		break;
 
 		default:
@@ -531,28 +641,12 @@ function lowLevelFormatting(section)
     canvas.insertAt(disk_platter_inst, 1, true);
     canvas.insertAt(disk_actuator_inst, 2, true);
 
-    rpm = 16;
-    rpm_slider.slider("value", 16);
-    actuatorAnimateTo(1);
-
-    if(currentSection == Section.LLFsk0 || currentSection == Section.LLFsk1)
-    {
-    	platterAnimateSkew(rpm);
-    }
-    if(currentSection == Section.LLFil0 || currentSection == Section.LLFsk0)
-    {
-    	platterAnimateInter(rpm);
-    }
-
     $("#canvas").show();
-    rpm_text.show();
-    rpm_slider.show();
-    skew_table.show();
-    inter_table.show();
 }
 
 function highLevelFormatting() {
-    stop_anim = true;
+    stop_skew = true;
+    stop_inter = true;
     currentSection = Section.HLF;
 
     // Definition
@@ -656,7 +750,8 @@ function get_time() {
 function platterAnimateSkew(animation_rpm) {
     var prev_angle = 0;
     var cur_angle = 0;
-    if (stop_anim == false || rpm > 0) {
+	next_track = cur_track;
+    if (stop_skew == false || rpm > 0) {
         fabric.util.animate(
             {
                 startValue: 0,
@@ -700,84 +795,113 @@ function platterAnimateSkew(animation_rpm) {
                 },
 
                 abort: function () {
-                    return (animation_rpm != rpm || stop_anim);
+                    return (animation_rpm != rpm || stop_skew);
                 }
             });
     }
 }
 
-var sect_color_red = [0, 0, 0, 0, 71, 50, 26, 11];
-var sect_color_green = [150, 113, 64, 25, 207, 151, 79, 29];
-var sect_color_blue = [246, 183, 105, 42, 0, 0, 0, 0];
-var sect_target = 0;
+var inter1_color_r = [0, 0, 0, 0, 71, 50, 26, 11];
+var inter1_color_g = [150, 113, 64, 25, 207, 151, 79, 29];
+var inter1_color_b = [246, 183, 105, 42, 0, 0, 0, 0];
+var inter1_local = [0, 2, 4, 6, 1, 3, 5, 7];
+var inter1_size = 8;
 
-function platterAnimateInter(animation_rpm) {
-    var prev_angle = 0;
-    var cur_angle = 0;
 
-    if (stop_anim == false || rpm > 0) {
+var uninter_color_r = [0, 0, 0, 0, 0, 0, 0, 0];
+var uninter_color_g = [150, 134, 115, 91, 68, 43, 23, 5];
+var uninter_color_b = [245, 220, 184, 150, 107, 69, 36, 9];
+var uninter_local = [0, 1, 2, 3, 4, 5, 6, 7];
+var uninter_size = 8;
+
+var sect_count = 0;
+var writing = false;
+
+function platterAnimateInter(animation_rpm, write_time, write_count, sect_local, sect_size, sect_color_r, sect_color_g, sect_color_b)
+{
+	var prev_angle = 0;
+	var cur_angle = 0;
+	var counter = 1;
+	
+    if (stop_inter == false || rpm > 0) {
         fabric.util.animate(
-            {
-                startValue: 0,
-                endValue: 360,
-                duration: 60000 / animation_rpm,
-                easing: function (t, b, c, d) {
-                    return c * t / d + b;
-                },
-                onChange: function (angle) {
-                    prev_angle = cur_angle;
-                    cur_angle = angle;
-                    var target_angle = sect_target * 45;
+        {
+            startValue: 0,
+            endValue: 360,
+            duration: 60000 / animation_rpm,
+			easing: function (t, b, c, d)
+			{
+				return c * t / d + b;
+			},
+			onChange: function (angle)
+			{
+				prev_angle = cur_angle;
+				cur_angle = angle;
+				var target_angle = counter * 45;
+				
+				if(cur_angle >= target_angle
+				&& target_angle > prev_angle)
+				{
+					console.log(counter);
+					counter++;
+					console.log(writing);
+					if(writing == true)
+						write_count++;
+				}
+				
+				if(write_count == write_time)
+				{
+					write_count = 0;
+					writing = false;
+				}
+					
+				
+				target_angle = (sect_local[sect_count] + 1) * 45;
+				
+				if(cur_angle >= target_angle
+				&& target_angle > prev_angle
+				&& writing == false)
+				{
+					var rgb = "rgb(" + sect_color_r[sect_count] + ", "  + sect_color_g[sect_count] + ", "  + sect_color_b[sect_count] + ")";
+					buffer.attr("fill", rgb);
+					if(sect_count == sect_size - 1)
+						write_count--;
+					sect_count = (sect_count + 1) % sect_size;
+					writing = true;
+				}
 
-                    if (cur_angle >= target_angle && target_angle >= prev_angle) {
-                        if (reading == true)
-                            reading = false;
-                        else {
-                            var rgb = "rgb(" + sect_color_red[sect_target - 1] + ", " + sect_color_green[sect_target - 1] + ", " + sect_color_blue[sect_target - 1] + ")";
-                            buffer.attr("fill", rgb);
-                            sect_target = (sect_target + 2) % platter_division;
-                            reading = true;
-                        }
-                    }
-                    disk_platter_inst.setAngle(angle + initial_angle[1]);
-                    canvas.renderAll();
-                },
-                onComplete: function () {
-                    if (animation_rpm == rpm) {
-                        platterAnimateInter(animation_rpm);
-                    }
-                },
+				disk_platter_inst.setAngle(angle + initial_angle[1]);
+				canvas.renderAll();
+			},
+			onComplete: function ()
+			{
+				if (animation_rpm == rpm)
+				{
+					platterAnimateInter(animation_rpm, write_time, write_count, sect_local, sect_size, sect_color_r, sect_color_g, sect_color_b);
+				}
+			},
 
-                abort: function () {
-                    return (animation_rpm != rpm || stop_anim);
-                }
-            });
+			abort: function ()
+			{
+				return (animation_rpm != rpm || stop_inter);
+			}
+        });
     }
 }
-
-var actuator_velocity = 20;
-var actuator_angle = 30;
+var actuator_velocity = 40;
+var actuator_angles = [30, 40, 55];
 var actuator_moving = false;
 
 function actuatorAnimateTo(track) {
     if (actuator_moving == true)
         return;
 
-    var angle;
-    if (track == 0)
-        angle = 30;
-    else if (track == 1)
-        angle = 40;
-    else if (track == 2)
-        angle = 55;
-
-    if (actuator_angle == angle)
+    if (cur_track == track)
         return;
 
-    actuator_moving = true;
 
-    if (stop_anim == false) {
-        var auxiliar = angle;
+    if (stop_actuator == false) {
+		actuator_moving = true;
 
         circle_track0.attr("fill", "red");
         circle_track1.attr("fill", "red");
@@ -785,9 +909,9 @@ function actuatorAnimateTo(track) {
 
         fabric.util.animate(
             {
-                startValue: actuator_angle,
-                endValue: angle,
-                duration: 1000 * Math.abs(actuator_angle - angle) / actuator_velocity,
+                startValue: actuator_angles[cur_track],
+                endValue: actuator_angles[track],
+                duration: 1000 * Math.abs(actuator_angles[cur_track] - actuator_angles[track]) / actuator_velocity,
                 easing: function (t, b, c, d) {
                     return c * t / d + b;
                 },
@@ -803,17 +927,13 @@ function actuatorAnimateTo(track) {
                     else
                         circle_track2.attr("fill", "yellow");
 
-                    actuator_angle = auxiliar;
                     actuator_moving = false;
                     cur_track = track;
                 },
                 abort: function () {
-                    return stop_anim;
+                    return stop_actuator;
                 }
             });
-    }
-    else {
-        actuator_moving = false;
     }
 }
 
@@ -930,5 +1050,7 @@ function hideAll() {
     inter_table.hide();
     main_text.html("");
 
-    stop_anim = true;
+    stop_skew = true;
+    stop_inter = true;
+    stop_actuator = true;
 }
