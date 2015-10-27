@@ -12,6 +12,12 @@ var hd_en = "Hard Disk";
 var llf_pt = "Formatação de Baixo Nível";
 var llf_en = "Low Level Formatting";
 
+var skew_pt = "Deslocamento de Cilindro";
+var skew_en = "Cylinder Skew";
+
+var interleaving_pt = "Entrelaçamento";
+var interleaving_en = "Interleaving";
+
 var hlf_pt = "Formatação de Alto Nível";
 var hlf_en = "High Level Formatting";
 
@@ -725,6 +731,8 @@ function setLangPt()
     $("#begin-button").html(begin_pt);
     $("#hd-button").html(hd_pt);
     $("#llf-button").html(llf_pt);
+    $("#skew-button").html(skew_pt);
+    $("#interleaving-button").html(interleaving_pt);
     $("#hlf-button").html(hlf_pt);
     $("#about-button").html(about_pt);
     $("#credits-button").html(credits_pt);
@@ -765,6 +773,8 @@ function setLangEn()
     $("#begin-button").html(begin_en);
     $("#hd-button").html(hd_en);
     $("#llf-button").html(llf_en);
+    $("#skew-button").html(skew_en);
+    $("#interleaving-button").html(interleaving_en);
     $("#hlf-button").html(hlf_en);
     $("#about-button").html(about_en);
     $("#credits-button").html(credits_en);
