@@ -301,10 +301,7 @@ function initialize()
     // --- END IMAGES BLOCK --- //
 
     rpm_text = $("#rpm");
-    if (lang == Languages._enUs)
-        rpm_text.html("Disk Rotation Speed (RPM): " + rpm);
-    else
-        rpm_text.html("Velocidade do Disco (RPM): " + rpm);
+    changeRpmText(rpm);
 
     rpm_slider = $("#selector");
     content = $("#content");
@@ -328,10 +325,7 @@ function initialize()
 			circle_track0.attr("fill", "red");
 			circle_track1.attr("fill", "red");
 			circle_track2.attr("fill", "red");
-            if (lang == Languages._enUs)
-                rpm_text.html("Disk Rotation Speed (RPM): " + ui.value);
-            else
-                rpm_text.html("Velocidade do Disco (RPM): " + ui.value);
+			changeRpmText(ui.value);
             actuator_angle = 30;
             disk_actuator_inst.setAngle(30);
             rpm = 0;
@@ -356,6 +350,15 @@ function initialize()
 	hideAll();
 	$("#previous-button").hide();
 	$("#next-button").hide();
+}
+
+function changeRpmText(cur_rpm)
+{
+	
+	if (lang == Languages._enUs)
+		rpm_text.html("Disk Rotation Speed (RPM): " + cur_rpm);
+	else
+		rpm_text.html("Velocidade do Disco (RPM): " + cur_rpm);
 }
 
 function beginPresentation()
@@ -465,7 +468,9 @@ function hardDisk()
 
 	rpm = 8;
 	rpm_slider.slider("value", 8);
-	actuatorAnimateTo(0);
+	changeRpmText(rpm);
+	disk_actuator_inst.setAngle(30);
+	cur_track = 0;
     platterAnimateSkew(rpm);
 
     $("#canvas").show();
@@ -478,7 +483,7 @@ function lowLevelFormatting()
     stop_anim = false;
     currentSection = Section.LLF;
     //disk_platter_img.src = 'images/platters/skewed_platter.png';
-    disk_platter_img.src = 'images/platters/interleaved_platter.png';
+    disk_platter_img.src = 'images/platters/uninterleaved_platter.png';
 
     canvas.insertAt(disk_case_inst, 0, true);
     canvas.insertAt(disk_platter_inst, 1, true);
@@ -486,8 +491,10 @@ function lowLevelFormatting()
 
 	rpm = 16;
 	rpm_slider.slider("value", 16);
-	actuatorAnimateTo(1);
-    platterAnimateInter(rpm);
+	changeRpmText(rpm);
+	disk_actuator_inst.setAngle(40);
+	cur_track = 1;
+    platterAnimateInter(rpm, 2, 0, uninter_local, uninter_size, uninter_color_r, uninter_color_g, uninter_color_b);
 
     $("#canvas").show();
     rpm_text.show();
@@ -577,15 +584,27 @@ function platterAnimateSkew(animation_rpm)
     }
 }
 
-var sect_color_red = [0, 0, 0, 0, 71, 50, 26, 11];
-var sect_color_green = [150, 113, 64, 25, 207, 151, 79, 29];
-var sect_color_blue = [246, 183, 105, 42, 0, 0, 0, 0];
-var sect_target = 0;
+var inter1_color_r = [0, 0, 0, 0, 71, 50, 26, 11];
+var inter1_color_g = [150, 113, 64, 25, 207, 151, 79, 29];
+var inter1_color_b = [246, 183, 105, 42, 0, 0, 0, 0];
+var inter1_local = [0, 2, 4, 6, 1, 3, 5, 7];
+var inter1_size = 8;
 
-function platterAnimateInter(animation_rpm)
+
+var uninter_color_r = [0, 0, 0, 0, 0, 0, 0, 0];
+var uninter_color_g = [150, 134, 115, 91, 68, 43, 23, 5];
+var uninter_color_b = [245, 220, 184, 150, 107, 69, 36, 9];
+var uninter_local = [0, 1, 2, 3, 4, 5, 6, 7];
+var uninter_size = 8;
+
+var sect_count = 0;
+var writing = false;
+
+function platterAnimateInter(animation_rpm, write_time, write_count, sect_local, sect_size, sect_color_r, sect_color_g, sect_color_b)
 {
 	var prev_angle = 0;
 	var cur_angle = 0;
+	var counter = 1;
 	
     if (stop_anim == false || rpm > 0) {
         fabric.util.animate(
@@ -601,20 +620,39 @@ function platterAnimateInter(animation_rpm)
 			{
 				prev_angle = cur_angle;
 				cur_angle = angle;
-				var target_angle = sect_target * 45;
+				var target_angle = counter * 45;
 				
-				if(cur_angle >= target_angle && target_angle >= prev_angle)
+				if(cur_angle >= target_angle
+				&& target_angle > prev_angle)
 				{
-					if(reading == true)
-						reading = false;
-					else
-					{
-						var rgb = "rgb(" + sect_color_red[sect_target - 1] + ", "  + sect_color_green[sect_target - 1] + ", "  + sect_color_blue[sect_target - 1] + ")";
-						buffer.attr("fill", rgb);
-						sect_target = (sect_target + 2) % platter_division;
-						reading = true;
-					}
+					console.log(counter);
+					counter++;
+					console.log(writing);
+					if(writing == true)
+						write_count++;
 				}
+				
+				if(write_count == write_time)
+				{
+					write_count = 0;
+					writing = false;
+				}
+					
+				
+				target_angle = (sect_local[sect_count] + 1) * 45;
+				
+				if(cur_angle >= target_angle
+				&& target_angle > prev_angle
+				&& writing == false)
+				{
+					var rgb = "rgb(" + sect_color_r[sect_count] + ", "  + sect_color_g[sect_count] + ", "  + sect_color_b[sect_count] + ")";
+					buffer.attr("fill", rgb);
+					if(sect_count == sect_size - 1)
+						write_count--;
+					sect_count = (sect_count + 1) % sect_size;
+					writing = true;
+				}
+
 				disk_platter_inst.setAngle(angle + initial_angle[1]);
 				canvas.renderAll();
 			},
@@ -622,7 +660,7 @@ function platterAnimateInter(animation_rpm)
 			{
 				if (animation_rpm == rpm)
 				{
-					platterAnimateInter(animation_rpm);
+					platterAnimateInter(animation_rpm, write_time, write_count, sect_local, sect_size, sect_color_r, sect_color_g, sect_color_b);
 				}
 			},
 
