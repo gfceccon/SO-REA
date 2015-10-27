@@ -53,6 +53,14 @@
             <li>
                 <a href="#" id="llf-button" onclick="hideAll();endPresentation();lowLevelFormatting();">Formatação de Baixo Nível</a>
             </li>
+            <ul>
+                <li>
+                    <a href="#" id="skew-button" onclick="hideAll();skewing();">Deslocamento de Cilindro</a>
+                </li>
+                <li>
+                    <a href="#" id="interleaving-button" onclick="hideAll();interleaving();">Entrelaçamento</a>
+                </li>
+            </ul>
             <li>
                 <a href="#" id="hlf-button" onclick="hideAll();endPresentation();highLevelFormatting();">Formatação de Alto Nível</a>
             </li>
@@ -66,15 +74,16 @@
                 <div id="rpm"></div>
                 <div id="selector" style="margin:0px 10px;"></div>
             </li>
+            <br>
+            <div class="navigation">
+                <a href="#">
+                    <image src="images/navigation/nav_arrow_left_grey.png" id="previous-button" class="navbutton" onclick="hideAll();navPrev();"></a>             
+                </a>
+                <a href="#">
+                    <image src="images/navigation/nav_arrow_right_grey.png" id="next-button" class="navbutton" onclick="hideAll();navNext();"></a>
+                </a>
+            </div>
         </ul>
-        <div class="navigation">
-            <a href="#">
-                <image src="images/navigation/nav_arrow_left_grey.png" id="previous-button" class="navbutton" onclick="hideAll();navPrev();"></a>             
-            </a>
-            <a href="#">
-                <image src="images/navigation/nav_arrow_right_grey.png" id="next-button" class="navbutton" onclick="hideAll();navNext();"></a>
-            </a>
-        </div>
         <div class="languages">
             <a href="#">
                 <image src="images/flags/br.png" id="br" class="flag" onclick="setLangPt();"></image>
