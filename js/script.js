@@ -12,11 +12,17 @@ var hd_en = "Hard Disk";
 var llf_pt = "Formatação de Baixo Nível";
 var llf_en = "Low Level Formatting";
 
-var skew_pt = "Deslocamento de Cilindro";
-var skew_en = "Cylinder Skew";
+var skew0_pt = "Cilindro sem Torção";
+var skew0_en = "Unskewed Cylinder";
 
-var interleaving_pt = "Entrelaçamento";
-var interleaving_en = "Interleaving";
+var skew1_pt = "Torção de Cilindro";
+var skew1_en = "Skewed Cylinder";
+
+var interleaving0_pt = "Sem Entrelaçamento";
+var interleaving0_en = "No Interleaving";
+
+var interleaving1_pt = "Com Entrelaçamento";
+var interleaving1_en = "Interleaving";
 
 var hlf_pt = "Formatação de Alto Nível";
 var hlf_en = "High Level Formatting";
@@ -85,6 +91,10 @@ var lang = Languages._ptBr;
 var Section = {
     HD: 0,
     LLF: 1,
+    LLFsk0: 11,
+    LLFsk1: 12,
+    LLFil0: 13,
+    LLFil1: 14,
     HLF: 2,
     About: 3,
     Credits: 4,
@@ -347,7 +357,9 @@ function initialize() {
 function beginPresentation() {
     presentation_mode = true;
     hideAll();
-    $("#previous-button").hide();
+    document.getElementById("previous-button").src = "images/navigation/nav_arrow_left.png";
+    document.getElementById("next-button").src = 'images/navigation/nav_arrow_right_grey.png';
+    $("#previous-button").show();
     $("#next-button").show();
     hardDisk();
 }
@@ -362,11 +374,26 @@ function navNext() {
     switch (currentSection) {
         case Section.HD:
             hideAll();
-            $("#previous-button").show();
-            lowLevelFormatting();
+            document.getElementById("previous-button").src = "images/navigation/nav_arrow_left_grey.png";
+            lowLevelFormatting(Section.LLFsk0);
             break;
 
-        case Section.LLF:
+        case Section.LLFsk0:
+            hideAll();
+            lowLevelFormatting(Section.LLFsk1);
+            break;
+
+        case Section.LLFsk1:
+            hideAll();
+            lowLevelFormatting(Section.LLFil0);
+            break;
+
+        case Section.LLFil0:
+            hideAll();
+            lowLevelFormatting(Section.LLFil1);
+            break;
+
+        case Section.LLFil1:
             hideAll();
             highLevelFormatting();
             break;
@@ -378,7 +405,7 @@ function navNext() {
 
         case Section.About:
             hideAll();
-            $("#next-button").hide();
+            document.getElementById("next-button").src = "images/navigation/nav_arrow_right.png";
             credits();
             break;
 
@@ -389,16 +416,32 @@ function navNext() {
 }
 
 function navPrev() {
-    switch (currentSection) {
-        case Section.LLF:
+	switch (currentSection)
+	{
+    	case Section.LLFsk0:
             hideAll();
-            $("#previous-button").hide();
+            document.getElementById("previous-button").src = "images/navigation/nav_arrow_left.png";
             hardDisk();
+            break;
+
+        case Section.LLFsk1:
+            hideAll();
+            lowLevelFormatting(Section.LLFsk0);
+            break;
+
+        case Section.LLFil0:
+            hideAll();
+            lowLevelFormatting(Section.LLFsk1);
+            break;
+
+        case Section.LLFil1:
+            hideAll();
+            lowLevelFormatting(Section.LLFil0);
             break;
 
         case Section.HLF:
             hideAll();
-            lowLevelFormatting();
+            lowLevelFormatting(Section.LLFil1);
             break;
 
         case Section.About:
@@ -408,7 +451,7 @@ function navPrev() {
 
         case Section.Credits:
             hideAll();
-            $("#next-button").show();
+            document.getElementById("next-button").src = "images/navigation/nav_arrow_right_grey.png";
             about();
             break;
 
@@ -452,20 +495,54 @@ function hardDisk() {
     rpm_slider.show();
 }
 
-function lowLevelFormatting() {
-    stop_anim = false;
-    currentSection = Section.LLF;
-    //disk_platter_img.src = 'images/platters/skewed_platter.png';
-    disk_platter_img.src = 'images/platters/interleaved_platter.png';
+function lowLevelFormatting(section)
+{
+	stop_anim = false;
+      
+	switch (section)
+	{
+		case Section.LLFsk0:
+			currentSection = Section.LLFsk0;
+			disk_platter_img.src = 'images/platters/unskewed_platter.png';
+			skew = 0;
+		break;
 
-    canvas.insertAt(disk_case_inst, 0, true);
+		case Section.LLFsk1:
+			currentSection = Section.LLFsk1;
+			disk_platter_img.src = 'images/platters/skewed_platter.png';
+			skew = 1;
+		break;
+
+		case Section.LLFil0:
+			currentSection = Section.LLFil0;
+			disk_platter_img.src = 'images/platters/uninterleaved_platter.png';
+		break;
+
+		case Section.LLFil1:
+			currentSection = Section.LLFil1;
+			disk_platter_img.src = 'images/platters/interleaved_platter.png';
+		break;
+
+		default:
+		break;
+	}
+
+	canvas.insertAt(disk_case_inst, 0, true);
     canvas.insertAt(disk_platter_inst, 1, true);
     canvas.insertAt(disk_actuator_inst, 2, true);
 
     rpm = 16;
     rpm_slider.slider("value", 16);
     actuatorAnimateTo(1);
-    platterAnimateInter(rpm);
+
+    if(currentSection == Section.LLFsk0 || currentSection == Section.LLFsk1)
+    {
+    	platterAnimateSkew(rpm);
+    }
+    if(currentSection == Section.LLFil0 || currentSection == Section.LLFsk0)
+    {
+    	platterAnimateInter(rpm);
+    }
 
     $("#canvas").show();
     rpm_text.show();
@@ -766,8 +843,10 @@ function setLangPt() {
     $("#begin-button").html(begin_pt);
     $("#hd-button").html(hd_pt);
     $("#llf-button").html(llf_pt);
-    $("#skew-button").html(skew_pt);
-    $("#interleaving-button").html(interleaving_pt);
+    $("#0skew-button").html(skew0_pt);
+    $("#1skew-button").html(skew1_pt);
+    $("#0interleaving-button").html(interleaving0_pt);
+    $("#1interleaving-button").html(interleaving1_pt);
     $("#hlf-button").html(hlf_pt);
     $("#about-button").html(about_pt);
     $("#credits-button").html(credits_pt);
@@ -806,8 +885,10 @@ function setLangEn() {
     $("#begin-button").html(begin_en);
     $("#hd-button").html(hd_en);
     $("#llf-button").html(llf_en);
-    $("#skew-button").html(skew_en);
-    $("#interleaving-button").html(interleaving_en);
+    $("#0skew-button").html(skew0_en);
+    $("#1skew-button").html(skew1_en);
+    $("#0interleaving-button").html(interleaving0_en);
+    $("#1interleaving-button").html(interleaving1_en);
     $("#hlf-button").html(hlf_en);
     $("#about-button").html(about_en);
     $("#credits-button").html(credits_en);

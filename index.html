@@ -51,15 +51,21 @@
                 <a href="#" id="hd-button" onclick="hideAll();endPresentation();hardDisk();">Disco Rígido</a>
             </li>
             <li>
-                <a href="#" id="llf-button" onclick="hideAll();endPresentation();lowLevelFormatting();">Formatação de
+                <a href="#" id="llf-button" onclick="hideAll();endPresentation();lowLevelFormatting(11);">Formatação de
                     Baixo Nível</a>
             </li>
             <ul>
                 <li>
-                    <a href="#" id="skew-button" onclick="hideAll();skewing();">Deslocamento de Cilindro</a>
+                    <a href="#" id="0skew-button" onclick="hideAll();lowLevelFormatting(11);">Cilindro sem Torção</a>
                 </li>
                 <li>
-                    <a href="#" id="interleaving-button" onclick="hideAll();interleaving();">Entrelaçamento</a>
+                    <a href="#" id="1skew-button" onclick="hideAll();lowLevelFormatting(12);">Torção de Cilindro</a>
+                </li>
+                <li>
+                    <a href="#" id="0interleaving-button" onclick="hideAll();lowLevelFormatting(13);">Sem Entrelaçamento</a>
+                </li>
+                <li>
+                    <a href="#" id="1interleaving-button" onclick="hideAll();lowLevelFormatting(14);">Com Entrelaçamento</a>
                 </li>
             </ul>
             <li>
@@ -81,12 +87,12 @@
             <div class="navigation">
                 <a href="#">
                     <image src="images/navigation/nav_arrow_left_grey.png" id="previous-button" class="navbutton"
-                           onclick="hideAll();navPrev();">
+                           onclick="navPrev();">
                 </a>
                 </a>
                 <a href="#">
                     <image src="images/navigation/nav_arrow_right_grey.png" id="next-button" class="navbutton"
-                           onclick="hideAll();navNext();">
+                           onclick="navNext();">
                 </a>
                 </a>
             </div>
