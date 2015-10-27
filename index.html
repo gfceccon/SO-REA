@@ -45,28 +45,36 @@
                 </a>
             </li>
             <li>
-                <a href="#" id="begin-button">Iniciar</a>
+                <a href="#" id="begin-button" onclick="hideAll();beginPresentation();">Iniciar</a>
             </li>
             <li>
-                <a href="#" id="hd-button" onclick="hideAll();hardDisk();">Disco Rígido</a>
+                <a href="#" id="hd-button" onclick="hideAll();endPresentation();hardDisk();">Disco Rígido</a>
             </li>
             <li>
-                <a href="#" id="llf-button" onclick="hideAll();lowLevelFormatting();">Formatação de Baixo Nível</a>
+                <a href="#" id="llf-button" onclick="hideAll();endPresentation();lowLevelFormatting();">Formatação de Baixo Nível</a>
             </li>
             <li>
-                <a href="#" id="hlf-button" onclick="hideAll();highLevelFormatting();">Formatação de Alto Nível</a>
+                <a href="#" id="hlf-button" onclick="hideAll();endPresentation();highLevelFormatting();">Formatação de Alto Nível</a>
             </li>
             <li>
-                <a href="#" id="about-button" onclick="hideAll();about();">Sobre</a>
+                <a href="#" id="about-button" onclick="hideAll();endPresentation();about();">Sobre</a>
             </li>
             <li>
-                <a href="#" id="credits-button" onclick="hideAll();credits();">Créditos</a>
+                <a href="#" id="credits-button" onclick="hideAll();endPresentation();credits();">Créditos</a>
             </li>
             <li>
                 <div id="rpm"></div>
                 <div id="selector" style="margin:0px 10px;"></div>
             </li>
         </ul>
+        <div class="navigation">
+            <a href="#">
+                <image src="images/navigation/nav_arrow_left_grey.png" id="previous-button" class="navbutton" onclick="hideAll();navPrev();"></a>             
+            </a>
+            <a href="#">
+                <image src="images/navigation/nav_arrow_right_grey.png" id="next-button" class="navbutton" onclick="hideAll();navNext();"></a>
+            </a>
+        </div>
         <div class="languages">
             <a href="#">
                 <image src="images/flags/br.png" id="br" class="flag" onclick="setLangPt();"></image>

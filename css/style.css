@@ -12,6 +12,20 @@
 	height: 64px;
 }
 
+.navigation
+{ 
+	position: absolute;
+    bottom: 52%;
+    left: 25%;
+	width: 100%;
+}
+
+.navbutton
+{ 
+	width: 64px;
+	height: 64px;
+}
+
 .screenshot
 {
 	width: 50%;

@@ -1,3 +1,5 @@
+/// -- HTML TEXT --- ///
+
 var title_pt = "Formatação de Disco";
 var title_en = "Disk Formatting";
 
@@ -63,6 +65,11 @@ var credits_text_en = "<p class=\"title\">Credits</p>" +
     "São Carlos - SP, Brasil.<br>" +
     "Second semester of 2015.</p>";
 
+
+/// -- SYSTEM VARIABLES --- ///
+
+var presentation_mode = false;
+
 var Languages = {
     _ptBr: 0,
     _enUs: 1
@@ -70,12 +77,14 @@ var Languages = {
 var lang = Languages._ptBr;
 
 var Section = {
-    About: 0,
-    Credits: 1,
-    HardDisk: 2,
-    Other: 3,
+    HD: 0,
+    LLF: 1,
+    HLF: 2,
+    About: 3,
+    Credits: 4,
+    Other: 5
 };
-var currentSection = Section.Other;
+var currentSection = Section.HD;
 
 var canvas = false;
 
@@ -339,12 +348,93 @@ function initialize()
     });
 
 	hideAll();
+	$("#previous-button").hide();
+	$("#next-button").hide();
+}
+
+function beginPresentation()
+{
+	presentation_mode = true;
+	hideAll();
+	$("#previous-button").hide();
+	$("#next-button").show();
+	hardDisk();
+}
+
+function endPresentation()
+{
+	presentation_mode = false;
+	$("#previous-button").hide();
+	$("#next-button").hide();
+}
+
+function navNext()
+{
+	switch (currentSection)
+    {
+    	case Section.HD:
+    		hideAll();
+    		$("#previous-button").show();
+    		lowLevelFormatting();
+    		break;
+
+    	case Section.LLF:
+    		hideAll();
+    		highLevelFormatting();
+    		break;
+
+    	case Section.HLF:
+    		hideAll();
+    		about();
+    		break;
+
+        case Section.About:
+            hideAll();
+            $("#next-button").hide();
+            credits();
+            break;
+
+        default:
+            break;
+    }
+
+}
+
+function navPrev()
+{
+	switch (currentSection)
+    {
+    	case Section.LLF:
+    		hideAll();
+    		$("#previous-button").hide();
+    		hardDisk();
+    		break;
+
+    	case Section.HLF:
+    		hideAll();
+    		lowLevelFormatting();
+    		break;
+
+        case Section.About:
+            hideAll();
+            highLevelFormatting();
+            break;
+
+        case Section.Credits:
+            hideAll();
+            $("#next-button").show();
+            about();
+            break;
+
+        default:
+            break;
+    }
 }
 
 function hardDisk()
 {
     stop_anim = false;
-    currentSection = Section.HardDisk;
+    currentSection = Section.HD;
     disk_cover_inst.left = 35;
 
     if (lang == Languages._ptBr)
@@ -380,7 +470,7 @@ function hardDisk()
 function lowLevelFormatting()
 {
     stop_anim = false;
-    currentSection = Section.Other;
+    currentSection = Section.LLF;
     //disk_platter_img.src = 'images/platters/skewed_platter.png';
     disk_platter_img.src = 'images/platters/interleaved_platter.png';
 
@@ -403,7 +493,7 @@ function lowLevelFormatting()
 function highLevelFormatting()
 {
     stop_anim = false;
-    currentSection = Section.Other;
+    currentSection = Section.HLF;
 
     // Wait for it...
 }
@@ -652,7 +742,7 @@ function setLangPt()
             credits();
             break;
 
-        case Section.HardDisk:
+        case Section.HD:
             disk_cover_img.src = 'images/others/disk_cover_pt.png';
             disk_platter_img.src = 'images/platters/platter_presentation_pt.png';
             actuator_text_img.src = 'images/text_buttons/actuator_text_pt.png';
@@ -692,7 +782,7 @@ function setLangEn()
             credits();
             break;
 
-        case Section.HardDisk:
+        case Section.HD:
             disk_cover_img.src = 'images/others/disk_cover_en.png';
             disk_platter_img.src = 'images/platters/platter_presentation_en.png';
             actuator_text_img.src = 'images/text_buttons/actuator_text_en.png';
