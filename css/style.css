@@ -50,7 +50,7 @@
     text-align: center;
 }
 
-#dpimg {
+#num_platter_base {
     z-index: 1;
     position: fixed;
     display: inline-block;
@@ -60,34 +60,100 @@
     border: 2px dashed black;
 }
 
-#part1 {
+#p_sample1 {
     top: 243px;
     left: 32.9%;
 }
 
-#part2 {
+#p_sample2 {
     top: 371px;
     left: 30%;
 }
 
-#part3 {
+#p_sample3 {
     top: 435px;
     left: 24.5%;
 }
 
-#part4 {
+#p_sample4 {
     top: 192px;
     left: 16.45%;
 }
 
-.pentry {
+.p_entry {
     z-index: 2;
-    height: 32px;
     width: 150px;
+    height: 32px;
     position: fixed;
 
+    color: white;
     text-align: center;
     display: inline-block;
-    background-color: darkcyan;
+    font-size: 14px;
+    font-weight: bold;
+    font-family: Courier, cursive;
     border: 5px outset darkcyan;
+    background-color: darkcyan;
+}
+#p_table {
+    z-index: 3;
+    width: 500px;
+    height: 300px;
+    position: fixed;
+    display: inline-block;
+
+    top: 118%;
+    left: 15.55%;
+    padding: 10px;
+
+    color: white;
+    font-size: 18px;
+    font-family: Courier, cursive;
+    border: 10px outset darkcyan;
+    background-color: darkcyan;
+}
+
+#p_table th {
+    border-bottom: 2px dotted whitesmoke;
+    text-align: center;
+    font-weight: bold;
+    padding: 10px;
+}
+
+#p_table td {
+    text-align: center;
+    padding: 10px;
+}
+
+.p_action_button {
+    width: 120px;
+    height: 50px;
+    position: fixed;
+    text-align: center;
+    display: inline-block;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: Courier, cursive;
+    border: 10px outset darkcyan;
+    background-color: darkcyan;
+}
+
+#p_navl {
+    top: 120%;
+    left: 15.55%;
+    cursor: pointer;
+}
+
+#p_navr {
+    top: 120%;
+    left: 35.4%;
+    opacity: 0.25;
+    cursor: default;
+}
+
+#p_blast {
+    top: 120%;
+    left: 25.475%;
+    cursor: pointer;
 }

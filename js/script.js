@@ -478,17 +478,89 @@ function highLevelFormatting() {
     stop_anim = true;
     currentSection = Section.HLF;
 
-    var $p1 = $("<div id='part1' class='pentry'><p>1, 6, 1, inodes</p></div>");
-    var $p2 = $("<div id='part2' class='pentry'><p>7, 6, 0, exFAT</p></div>");
-    var $p3 = $("<div id='part3' class='pentry'><p>14, 6, 0, NTFS</p></div>");
-    var $p4 = $("<div id='part4' class='pentry'><p>20, 4, 0, NTFS</p></div>");
-    var $platter = $("<img id='dpimg' src='images/platters/disk_platter_numbered.png'/>");
+    // Definition
+    var $platter = $("<img id='num_platter_base' src='images/platters/disk_platter_numbered.png'/>");
+    var $pa = new Array();
+    $pa[0] = $("<div id='p_sample1' class='p_entry'><p>1, 6, 1, inodes</p></div>");
+    $pa[1] = $("<div id='p_sample2' class='p_entry'><p>7, 7, 0, FAT-32</p></div>");
+    $pa[2] = $("<div id='p_sample3' class='p_entry'><p>14, 6, 0, NTFS</p></div>");
+    $pa[3] = $("<div id='p_sample4' class='p_entry'><p>20, 4, 0, NTFS</p></div>");
 
+    var $ptable = $("<table id='p_table'></table>");
+    var $pt = new Array();
+    $pt[0] = $("<tr><th>Starting Node</th><th>Size</th><th>Boot Flag</th><th>File System</th></tr>");
+    $pt[1] = $("<tr><td>1</td><td>6</td><td>1</td><td>inodes</td></tr>");
+    $pt[2] = $("<tr><td>7</td><td>7</td><td>0</td><td>FAT-32</td></tr>");
+    $pt[3] = $("<tr><td>14</td><td>6</td><td>0</td><td>NTFS</td></tr>");
+    $pt[4] = $("<tr><td>20</td><td>4</td><td>0</td><td>NTFS</td></tr>");
+
+    var $navl = $("<div class='p_action_button' id='p_navl'><p><</p></div>");
+    var $navr = $("<div class='p_action_button' id='p_navr'><p>></p></div>");
+    var $blast = $("<div class='p_action_button' id='p_blast'><p>Explode</p></div>");
+
+    // Injection
     $platter.fadeIn("fast").appendTo("#hlf");
-    $p1.hide().appendTo("#hlf").delay(200).fadeIn("fast");
-    $p2.hide().appendTo("#hlf").delay(400).fadeIn("fast");
-    $p3.hide().appendTo("#hlf").delay(600).fadeIn("fast");
-    $p4.hide().appendTo("#hlf").delay(800).fadeIn("fast");
+    $pa[0].hide().appendTo("#hlf").delay(100).fadeIn("fast");
+    $pa[1].hide().appendTo("#hlf").delay(200).fadeIn("fast");
+    $pa[2].hide().appendTo("#hlf").delay(300).fadeIn("fast");
+    $pa[3].hide().appendTo("#hlf").delay(400).fadeIn("fast");
+
+    $ptable.appendTo("#hlf").delay(500).animate({top: "-=60%"}, 300);
+    $pt[0].appendTo("#p_table");
+    $pt[1].appendTo("#p_table");
+    $pt[2].appendTo("#p_table");
+    $pt[3].appendTo("#p_table");
+    $pt[4].appendTo("#p_table");
+
+    $navl.appendTo("#hlf").delay(650).animate({top: "-=30%"}, 300);
+    $navr.appendTo("#hlf").delay(650).animate({top: "-=30%"}, 300);
+    $blast.appendTo("#hlf").delay(600).animate({top: "-=30%"}, 300);
+
+    // Behaviour
+    var step = 4;
+
+    $blast.click(function () {
+        if (step > 0) {
+
+            for (step; step > 0; step--) {
+                $pt[step].effect("explode", 500);
+                $pa[step - 1].effect("explode", 500);
+            }
+
+            $blast.css({"opacity": "0.25", "cursor": "default"});
+            $navr.css({"opacity": "1.00", "cursor": "pointer"});
+            $navl.css({"opacity": "0.25", "cursor": "default"});
+        }
+    });
+
+    $navr.click(function () {
+        if (step < 4) {
+
+            if (step === 0)
+                $blast.css({"opacity": "1.00", "cursor": "pointer"});
+
+            $navl.css({"opacity": "1.00", "cursor": "pointer"});
+            $pa[step++].hide().appendTo("#hlf").delay(100).fadeIn("fast");
+            $pt[step].hide().appendTo("#p_table").delay(100).fadeIn("fast");
+
+            if (step === 4)
+                $navr.css({"opacity": "0.25", "cursor": "default"});
+        }
+    });
+
+    $navl.click(function () {
+        if (step > 0) {
+
+            $navr.css({"opacity": "1.00", "cursor": "pointer"});
+            $pt[step--].fadeOut("fast");
+            $pa[step].fadeOut("fast");
+
+            if (step === 0) {
+                $blast.css({"opacity": "0.25", "cursor": "default"});
+                $navl.css({"opacity": "0.25", "cursor": "default"});
+            }
+        }
+    });
 }
 
 var reading = true;
