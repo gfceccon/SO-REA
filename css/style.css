@@ -129,3 +129,31 @@
     left: 205px;
     cursor: pointer;
 }
+
+#abt div {
+    text-align: center;
+    left: 400px;
+    width: auto;
+    height: auto;
+    pagging: 10px;
+    display: inline-block;
+    border: 10px outset dimgrey;
+    background-color: dimgrey;
+}
+
+#abt td {
+    padding: 10px;
+    margin: auto;
+    color: darkred;
+    font-size: 18px;
+    font-weight: bold;
+    font-family: Courier, cursive;
+    text-decoration: none;
+}
+
+.crew {
+    border: 5px inset dimgrey;
+    position: relative;
+    height: 300px;
+    width: auto;
+}

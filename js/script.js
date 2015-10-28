@@ -37,7 +37,7 @@ var about_text_pt = "<p class=\"title\">Sobre</p>" +
     "<p>Esta aplicação foi desenvolvida pensando-se na facilidade de uso. Ao entrar na aplicação, é possível ver um menu lateral, que contém todas as seções da aplicação, bem como as bandeiras de seleção de idioma.</p>" +
     "<p>O primeiro botão é o \"Iniciar\", que simplesmente passa por todas as seções da aplicação de forma linear. Ideal para quem nunca utilizou a aplicação e deseja experimentar tudo o que ela tem a oferecer.</p>" +
     "<p>O segundo botão é o de \"Disco Rígido\". Nesta seção, é possível observar como está internamente organizado o disco rígido, com suas principais partes nomeadas. A figura X mostra uma captura de tela com o estado da aplicação ao entrar nesta seção.<br>" +
-    "<image src='images/screenshots/hard_disk_pt.png' class='screenshot'></image></br>" +
+    "<p></p><image src='images/screenshots/hard_disk_pt.PNG' class='screenshot'></image><p></p>" +
     "Figura 1 - Visão da aplicação dentro da seção \"Disco Rígido\".</p>" +
     "<p>O terceiro botão é o de \"Formatação de Baixo Nível\". Ele possui quatro seções associadas a ele.<br>" +
     "1 - Cilindro sem Torção: Nesta seção é possível observar como funciona a leitura de setores consecutivos do disco em um cilindro sem torção.<br>" +
@@ -52,7 +52,7 @@ var about_text_en = "<p class=\"title\">About</p>" +
     "<p>This application was developed with ease of use in our minds. When first entering it, you can see a lateral menu, which contains all the available sections of the application, as well as the language selection flags.</p>" +
     "<p>The first button is \"Begin\", which will simply pass linearly through all sections of the application. Recommended for those who never used the application before, and want to experience everything it has to offer.</p>" +
     "<p>The second button is \"Hard Disk\". Here you can observe how a hard disk is internally organized, with its main components named. Figure X shows a screenshot with the state of the application after entering that section.<br>" +
-    "<image src='images/screenshots/hard_disk_en.png' class='screenshot'></image><br>" +
+    "<image src='images/screenshots/hard_disk_en.PNG' class='screenshot'></image><br>" +
     "Figure 1 - Application state inside \"Hard Disk\" section.</p>" +
     "<p>The third button is the \"Low Level Formatting\" button. It contains four inner sections.<br>" +
     "1 - Unskewed Cylinder: In this section it's possible to observe how the access to consecutive sectors works, in an unskewed cylinder disk.<br>" +
@@ -995,6 +995,7 @@ function actuatorAnimateTo(track) {
 }
 
 function about() {
+
     currentSection = Section.About;
 
     if (lang == Languages._ptBr)
@@ -1005,6 +1006,25 @@ function about() {
 
 function credits() {
     currentSection = Section.Credits;
+
+    $container = $("<div></div>");
+    $members = $("<table>" +
+                 "<tr>" +
+                 "<td><img class='crew' src='images/crew/ceccon.jpg'/></td>" +
+                 "<td><img class='crew' src='images/crew/moura.jpg'/></td>" +
+                 "<td><img class='crew' src='images/crew/nelsen.jpg'/></td>" +
+                 "<td><img class='crew' src='images/crew/zanardo.jpg'/></td>" +
+                 "</tr>" +
+                 "<tr>" +
+                 "<td><a href='https://github.com/gfceccon'>Gustavo Ceccon</a></td>" +
+                 "<td><a href='https://github.com/lucas-skilo'>Lucas Moura</a></td>" +
+                 "<td><a href='https://github.com/dnery'>Danilo Nery</a></td>" +
+                 "<td><a href='https://github.com/zanardob'>Guilherme Zanardo</td>" +
+                 "</tr>" +
+                 "</table>");
+
+    $members.appendTo($container);
+    $container.appendTo("#abt");
 
     if (lang == Languages._ptBr)
         main_text.html(credits_text_pt);
@@ -1107,8 +1127,10 @@ function setLangEn() {
 }
 
 function hideAll() {
+
     $("#canvas").hide();
     $("#hlf").empty();
+    $("#abt").empty();
     canvas.clear();
 
     rpm_text.hide();
