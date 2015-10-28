@@ -61,40 +61,13 @@
     border: 2px dashed black;
 }
 
-#p_sample1 {
-    top: 213px;
-    left: 346px;
-}
-
-#p_sample2 {
-    top: 341px;
-    left: 291px;
-}
-
-#p_sample3 {
-    top: 405px;
-    left: 185px;
-}
-
-#p_sample4 {
-    top: 162px;
-    left: 30px;
-}
-
-.p_entry {
+.p_bits {
     z-index: 2;
-    width: 150px;
-    height: 32px;
     display: inline-block;
     position: absolute;
-
-    color: white;
-    text-align: center;
-    font-size: 14px;
-    font-weight: bold;
-    font-family: Courier, cursive;
-    border: 5px outset darkcyan;
-    background-color: darkcyan;
+    padding: 8px;
+    left: 0px;
+    top: 0px;
 }
 
 #p_table {
@@ -113,15 +86,15 @@
 }
 
 #p_table th {
-    border-bottom: 2px dotted whitesmoke;
+    border-bottom: 2px solid whitesmoke;
     text-align: center;
     font-weight: bold;
-    padding: 10px;
+    padding: 7px;
 }
 
 #p_table td {
     text-align: center;
-    padding: 10px;
+    padding: 7px;
 }
 
 .p_action_button {

@@ -341,59 +341,73 @@ function initialize() {
                 rpm = 0;
                 cur_track = 0;
                 disk_actuator_inst.setAngle(actuator_angles[0]);
-				stop_skew = true;
-				stop_inter = true;
-				stop_actuator = true;
+                stop_skew = true;
+                stop_inter = true;
+                stop_actuator = true;
             },
             stop: function (event, ui) {
-				if(rpm == ui.value)
-					return;
+                if (rpm == ui.value)
+                    return;
                 rpm = ui.value;
                 switch (currentSection) {
-					case Section.HD:
-						stop_skew = false;
-						stop_actuator = false;
-						disk_actuator_inst.setAngle(actuator_angles[0]);
-						cur_track = 0;
-						skew = 0;
-						platterAnimateSkew(rpm);
-						break;
+                    case Section.HD:
+                        stop_skew = false;
+                        stop_actuator = false;
+                        disk_actuator_inst.setAngle(actuator_angles[0]);
+                        cur_track = 0;
+                        skew = 0;
+                        platterAnimateSkew(rpm);
+                        break;
 
-					case Section.LLFsk0:
-						stop_skew = false;
-						stop_actuator = false;
-						disk_actuator_inst.setAngle(actuator_angles[0]);
-						cur_track = 0;
-						skew = 0;
-						platterAnimateSkew(rpm);
-						break;
+                    case Section.LLFsk0:
+                        stop_skew = false;
+                        stop_actuator = false;
+                        disk_actuator_inst.setAngle(actuator_angles[0]);
+                        cur_track = 0;
+                        skew = 0;
+                        platterAnimateSkew(rpm);
+                        break;
 
-					case Section.LLFsk1:
-						stop_skew = false;
-						stop_actuator = false;
-						disk_actuator_inst.setAngle(actuator_angles[0]);
-						cur_track = 0;
-						skew = 1;
-						platterAnimateSkew(rpm);
-						break;
+                    case Section.LLFsk1:
+                        stop_skew = false;
+                        stop_actuator = false;
+                        disk_actuator_inst.setAngle(actuator_angles[0]);
+                        cur_track = 0;
+                        skew = 1;
+                        platterAnimateSkew(rpm);
+                        break;
 
-					case Section.LLFil0:
-						stop_inter = false;
-						disk_actuator_inst.setAngle(actuator_angles[1]);
-						cur_track = 1;
-						platterAnimateInter(rpm, 2, 0, uninter_local, uninter_size, uninter_color_r, uninter_color_g, uninter_color_b);
-						break;
+                    case Section.LLFil0:
+                        stop_inter = false;
+                        disk_actuator_inst.setAngle(actuator_angles[1]);
+                        cur_track = 1;
+                        platterAnimateInter(rpm,
+                                            2,
+                                            0,
+                                            uninter_local,
+                                            uninter_size,
+                                            uninter_color_r,
+                                            uninter_color_g,
+                                            uninter_color_b);
+                        break;
 
-					case Section.LLFil1:
-						stop_inter = false;
-						disk_actuator_inst.setAngle(actuator_angles[1]);
-						cur_track = 1;
-						platterAnimateInter(rpm, 1, 0, inter1_local, inter1_size, inter1_color_r, inter1_color_g, inter1_color_b);
-						break;
-						
-					default:
-						break;
-				}
+                    case Section.LLFil1:
+                        stop_inter = false;
+                        disk_actuator_inst.setAngle(actuator_angles[1]);
+                        cur_track = 1;
+                        platterAnimateInter(rpm,
+                                            1,
+                                            0,
+                                            inter1_local,
+                                            inter1_size,
+                                            inter1_color_r,
+                                            inter1_color_g,
+                                            inter1_color_b);
+                        break;
+
+                    default:
+                        break;
+                }
             }
         });
 
@@ -411,13 +425,12 @@ function initialize() {
     $("#next-button").hide();
 }
 
-function changeRpmText(cur_rpm)
-{
-	
-	if (lang == Languages._enUs)
-		rpm_text.html("Disk Rotation Speed (RPM): " + cur_rpm);
-	else
-		rpm_text.html("Velocidade do Disco (RPM): " + cur_rpm);
+function changeRpmText(cur_rpm) {
+
+    if (lang == Languages._enUs)
+        rpm_text.html("Disk Rotation Speed (RPM): " + cur_rpm);
+    else
+        rpm_text.html("Velocidade do Disco (RPM): " + cur_rpm);
 }
 
 function beginPresentation() {
@@ -482,9 +495,8 @@ function navNext() {
 }
 
 function navPrev() {
-	switch (currentSection)
-	{
-    	case Section.LLFsk0:
+    switch (currentSection) {
+        case Section.LLFsk0:
             hideAll();
             document.getElementById("previous-button").src = "images/navigation/nav_arrow_left.png";
             hardDisk();
@@ -528,8 +540,8 @@ function navPrev() {
 
 function hardDisk() {
     stop_skew = false;
-	stop_inter = true;
-	stop_actuator = false;
+    stop_inter = true;
+    stop_actuator = false;
     currentSection = Section.HD;
     disk_cover_inst.left = 35;
 
@@ -555,10 +567,10 @@ function hardDisk() {
 
     rpm = 8;
     rpm_slider.slider("value", 8);
-	changeRpmText(rpm);
-	disk_actuator_inst.setAngle(actuator_angles[0]);
-	cur_track = 0;
-	skew = 0;
+    changeRpmText(rpm);
+    disk_actuator_inst.setAngle(actuator_angles[0]);
+    cur_track = 0;
+    skew = 0;
     platterAnimateSkew(rpm);
 
     $("#canvas").show();
@@ -566,90 +578,95 @@ function hardDisk() {
     rpm_slider.show();
 }
 
-function lowLevelFormatting(section)
-{
+function lowLevelFormatting(section) {
     stop_skew = true;
-	stop_inter = true;
+    stop_inter = true;
     stop_actuator = true;
-	
-      
-	switch (section)
-	{
-		case Section.LLFsk0:
-			currentSection = Section.LLFsk0;
-			disk_platter_img.src = 'images/platters/unskewed_platter.png';
-			rpm_text.show();
-			rpm_slider.show();
-			skew_table.show();
-			
-			stop_skew = false;
-			stop_actuator = false;
-			rpm = 8;
-			rpm_slider.slider("value", 8);
-			changeRpmText(rpm);
-			disk_actuator_inst.setAngle(actuator_angles[0]);
-			cur_track = 0;
-			skew = 0;
-			platterAnimateSkew(rpm);
-		break;
 
-		case Section.LLFsk1:
-			currentSection = Section.LLFsk1;
-			disk_platter_img.src = 'images/platters/skewed_platter.png';
-			rpm_text.show();
-			rpm_slider.show();
-			skew_table.show();
-			
-			stop_skew = false;
-			stop_actuator = false;
-			rpm = 12;
-			rpm_slider.slider("value", 12);
-			changeRpmText(rpm);
-			disk_actuator_inst.setAngle(actuator_angles[0]);
-			cur_track = 0;
-			skew = 1;
-			platterAnimateSkew(rpm);
-		break;
 
-		case Section.LLFil0:
-			currentSection = Section.LLFil0;
-			disk_platter_img.src = 'images/platters/uninterleaved_platter.png';
-			rpm_text.show();
-			rpm_slider.show();
-			inter_table.show();
-			
-			stop_inter = false;
-			rpm = 16;
-			rpm_slider.slider("value", 16);
-			changeRpmText(rpm);
-			disk_actuator_inst.setAngle(actuator_angles[1]);
-			cur_track = 1;
-			sect_count = 0;
-			platterAnimateInter(rpm, 2, 0, uninter_local, uninter_size, uninter_color_r, uninter_color_g, uninter_color_b);
-		break;
+    switch (section) {
+        case Section.LLFsk0:
+            currentSection = Section.LLFsk0;
+            disk_platter_img.src = 'images/platters/unskewed_platter.png';
+            rpm_text.show();
+            rpm_slider.show();
+            skew_table.show();
 
-		case Section.LLFil1:
-			currentSection = Section.LLFil1;
-			disk_platter_img.src = 'images/platters/interleaved_platter.png';
-			rpm_text.show();
-			rpm_slider.show();
-			inter_table.show();
-			
-			stop_inter = false;
-			rpm = 12;
-			rpm_slider.slider("value", 12);
-			changeRpmText(rpm);
-			disk_actuator_inst.setAngle(actuator_angles[1]);
-			cur_track = 1;
-			sect_count = 0;
-			platterAnimateInter(rpm, 1, 0, inter1_local, inter1_size, inter1_color_r, inter1_color_g, inter1_color_b);
-		break;
+            stop_skew = false;
+            stop_actuator = false;
+            rpm = 8;
+            rpm_slider.slider("value", 8);
+            changeRpmText(rpm);
+            disk_actuator_inst.setAngle(actuator_angles[0]);
+            cur_track = 0;
+            skew = 0;
+            platterAnimateSkew(rpm);
+            break;
 
-		default:
-		break;
-	}
+        case Section.LLFsk1:
+            currentSection = Section.LLFsk1;
+            disk_platter_img.src = 'images/platters/skewed_platter.png';
+            rpm_text.show();
+            rpm_slider.show();
+            skew_table.show();
 
-	canvas.insertAt(disk_case_inst, 0, true);
+            stop_skew = false;
+            stop_actuator = false;
+            rpm = 12;
+            rpm_slider.slider("value", 12);
+            changeRpmText(rpm);
+            disk_actuator_inst.setAngle(actuator_angles[0]);
+            cur_track = 0;
+            skew = 1;
+            platterAnimateSkew(rpm);
+            break;
+
+        case Section.LLFil0:
+            currentSection = Section.LLFil0;
+            disk_platter_img.src = 'images/platters/uninterleaved_platter.png';
+            rpm_text.show();
+            rpm_slider.show();
+            inter_table.show();
+
+            stop_inter = false;
+            rpm = 16;
+            rpm_slider.slider("value", 16);
+            changeRpmText(rpm);
+            disk_actuator_inst.setAngle(actuator_angles[1]);
+            cur_track = 1;
+            sect_count = 0;
+            platterAnimateInter(rpm,
+                                2,
+                                0,
+                                uninter_local,
+                                uninter_size,
+                                uninter_color_r,
+                                uninter_color_g,
+                                uninter_color_b);
+            break;
+
+        case Section.LLFil1:
+            currentSection = Section.LLFil1;
+            disk_platter_img.src = 'images/platters/interleaved_platter.png';
+            rpm_text.show();
+            rpm_slider.show();
+            inter_table.show();
+
+            stop_inter = false;
+            rpm = 12;
+            rpm_slider.slider("value", 12);
+            changeRpmText(rpm);
+            disk_actuator_inst.setAngle(actuator_angles[1]);
+            cur_track = 1;
+            sect_count = 0;
+            platterAnimateInter(rpm, 1, 0, inter1_local, inter1_size, inter1_color_r, inter1_color_g, inter1_color_b);
+            break;
+
+        default:
+            break;
+    }
+
+    canvas.insertAt(disk_case_inst, 0, true);
     canvas.insertAt(disk_platter_inst, 1, true);
     canvas.insertAt(disk_actuator_inst, 2, true);
 
@@ -664,22 +681,24 @@ function highLevelFormatting() {
     // Definition
     var $platter = $("<img id='num_platter_base' src='images/platters/disk_platter_numbered.png'/>");
     var $pa = new Array();
-    $pa[0] = $("<div id='p_sample1' class='p_entry'><p>1, 6, 1, inodes</p></div>");
-    $pa[1] = $("<div id='p_sample2' class='p_entry'><p>7, 7, 0, FAT-32</p></div>");
-    $pa[2] = $("<div id='p_sample3' class='p_entry'><p>14, 6, 0, NTFS</p></div>");
-    $pa[3] = $("<div id='p_sample4' class='p_entry'><p>20, 4, 0, NTFS</p></div>");
+    $pa[0] = $("<img class='p_bits' src='images/platters/disk_platter_step_0.png'/>");
+    $pa[1] = $("<img class='p_bits' src='images/platters/disk_platter_step_1.png'/>");
+    $pa[2] = $("<img class='p_bits' src='images/platters/disk_platter_step_2.png'/>");
+    $pa[3] = $("<img class='p_bits' src='images/platters/disk_platter_step_3.png'/>");
+    $pa[4] = $("<img class='p_bits' src='images/platters/disk_platter_step_4.png'/>");
 
     var $ptable = $("<table id='p_table'></table>");
     var $pt = new Array();
-    $pt[0] = $("<tr><th>Starting Node</th><th>Size</th><th>Boot Flag</th><th>File System</th></tr>");
-    $pt[1] = $("<tr><td>1</td><td>6</td><td>1</td><td>inodes</td></tr>");
+    $pt[0] = $("<tr><th colspan='4'>Partition Table</th></tr>" +
+               "<tr><th>Starting Node</th><th>Size</th><th>Boot Flag</th><th>File System</th></tr>");
+    $pt[1] = $("<tr><td>1</td><td>6</td><td>1</td><td>ext4</td></tr>");
     $pt[2] = $("<tr><td>7</td><td>7</td><td>0</td><td>FAT-32</td></tr>");
-    $pt[3] = $("<tr><td>14</td><td>6</td><td>0</td><td>NTFS</td></tr>");
+    $pt[3] = $("<tr><td>14</td><td>6</td><td>0</td><td>ReiserFS</td></tr>");
     $pt[4] = $("<tr><td>20</td><td>4</td><td>0</td><td>NTFS</td></tr>");
 
     var $navl = $("<div class='p_action_button' id='p_navl'><p><</p></div>");
     var $navr = $("<div class='p_action_button' id='p_navr'><p>></p></div>");
-    var $blast = $("<div class='p_action_button' id='p_blast'><p>Explode</p></div>");
+    var $blast = $("<div class='p_action_button' id='p_blast'><p>Discard</p></div>");
 
     // Injection
     $platter.fadeIn("fast").appendTo("#hlf");
@@ -687,46 +706,53 @@ function highLevelFormatting() {
     $pa[1].hide().appendTo("#hlf").delay(200).fadeIn("fast");
     $pa[2].hide().appendTo("#hlf").delay(300).fadeIn("fast");
     $pa[3].hide().appendTo("#hlf").delay(400).fadeIn("fast");
+    $pa[4].hide().appendTo("#hlf").delay(500).fadeIn("fast");
 
-    $ptable.appendTo("#hlf").delay(500).animate({top: "-=1420px"}, 300);
+    $ptable.appendTo("#hlf").delay(600).animate({top: "-=1420px"}, 300);
     $pt[0].appendTo("#p_table");
     $pt[1].appendTo("#p_table");
     $pt[2].appendTo("#p_table");
     $pt[3].appendTo("#p_table");
     $pt[4].appendTo("#p_table");
 
-    $navl.appendTo("#hlf").delay(650).animate({top: "-=1110"}, 300);
-    $navr.appendTo("#hlf").delay(650).animate({top: "-=1110"}, 300);
-    $blast.appendTo("#hlf").delay(600).animate({top: "-=1110"}, 300);
+    $navl.appendTo("#hlf").delay(750).animate({top: "-=1110"}, 300);
+    $navr.appendTo("#hlf").delay(750).animate({top: "-=1110"}, 300);
+    $blast.appendTo("#hlf").delay(700).animate({top: "-=1110"}, 300);
 
     // Behaviour
-    var step = 4;
+    var step = 5;
 
     $blast.click(function () {
         if (step > 0) {
 
-            for (step; step > 0; step--) {
-                $pt[step].effect("explode", 500);
-                $pa[step - 1].effect("explode", 500);
-            }
+            if (step > 4) step = 4;
 
-            $blast.css({"opacity": "0.25", "cursor": "default"});
-            $navr.css({"opacity": "1.00", "cursor": "pointer"});
+            for (step; step > 0; step--) {
+                $pt[step].delay(100 * (5 - step)).fadeOut("slow");
+                $pa[step].delay(100 * (5 - step)).fadeOut("slow");
+            }
+            $pa[step].delay(100 * (5 - step)).fadeOut("slow");
+
             $navl.css({"opacity": "0.25", "cursor": "default"});
+            $navr.css({"opacity": "1.00", "cursor": "pointer"});
+            $blast.css({"opacity": "0.25", "cursor": "default"});
         }
     });
 
     $navr.click(function () {
-        if (step < 4) {
+        if (step < 5) {
 
-            if (step === 0)
+            if (step === 0) {
+                $navl.css({"opacity": "1.00", "cursor": "pointer"});
                 $blast.css({"opacity": "1.00", "cursor": "pointer"});
+            }
 
-            $navl.css({"opacity": "1.00", "cursor": "pointer"});
-            $pa[step++].hide().appendTo("#hlf").delay(100).fadeIn("fast");
-            $pt[step].hide().appendTo("#p_table").delay(100).fadeIn("fast");
+            $pa[step].hide().appendTo("#hlf").delay(100).fadeIn("fast");
 
-            if (step === 4)
+            if (step > 0)
+                $pt[step].hide().appendTo("#p_table").delay(100).fadeIn("fast"); step++;
+
+            if (step === 5)
                 $navr.css({"opacity": "0.25", "cursor": "default"});
         }
     });
@@ -734,13 +760,17 @@ function highLevelFormatting() {
     $navl.click(function () {
         if (step > 0) {
 
-            $navr.css({"opacity": "1.00", "cursor": "pointer"});
-            $pt[step--].fadeOut("fast");
-            $pa[step].fadeOut("fast");
+            if (step === 5)
+                $navr.css({"opacity": "1.00", "cursor": "pointer"});
+
+            $pa[step - 1].fadeOut("fast");
+
+            if ((step - 1) > 0)
+                $pt[step - 1].fadeOut("fast"); step--;
 
             if (step === 0) {
-                $blast.css({"opacity": "0.25", "cursor": "default"});
                 $navl.css({"opacity": "0.25", "cursor": "default"});
+                $blast.css({"opacity": "0.25", "cursor": "default"});
             }
         }
     });
@@ -762,7 +792,7 @@ function get_time() {
 function platterAnimateSkew(animation_rpm) {
     var prev_angle = 0;
     var cur_angle = 0;
-	next_track = cur_track;
+    next_track = cur_track;
     if (stop_skew == false || rpm > 0) {
         fabric.util.animate(
             {
@@ -829,75 +859,80 @@ var uninter_size = 8;
 var sect_count = 0;
 var writing = false;
 
-function platterAnimateInter(animation_rpm, write_time, write_count, sect_local, sect_size, sect_color_r, sect_color_g, sect_color_b)
-{
-	var prev_angle = 0;
-	var cur_angle = 0;
-	var counter = 1;
-	
+function platterAnimateInter(animation_rpm,
+                             write_time,
+                             write_count,
+                             sect_local,
+                             sect_size,
+                             sect_color_r,
+                             sect_color_g,
+                             sect_color_b) {
+    var prev_angle = 0;
+    var cur_angle = 0;
+    var counter = 1;
+
     if (stop_inter == false || rpm > 0) {
         fabric.util.animate(
-        {
-            startValue: 0,
-            endValue: 360,
-            duration: 60000 / animation_rpm,
-			easing: function (t, b, c, d)
-			{
-				return c * t / d + b;
-			},
-			onChange: function (angle)
-			{
-				prev_angle = cur_angle;
-				cur_angle = angle;
-				var target_angle = counter * 45;
-				
-				if(cur_angle >= target_angle
-				&& target_angle > prev_angle)
-				{
-					console.log(counter);
-					counter++;
-					console.log(writing);
-					if(writing == true)
-						write_count++;
-				}
-				
-				if(write_count == write_time)
-				{
-					write_count = 0;
-					writing = false;
-				}
-					
-				
-				target_angle = (sect_local[sect_count] + 1) * 45;
-				
-				if(cur_angle >= target_angle
-				&& target_angle > prev_angle
-				&& writing == false)
-				{
-					var rgb = "rgb(" + sect_color_r[sect_count] + ", "  + sect_color_g[sect_count] + ", "  + sect_color_b[sect_count] + ")";
-					buffer.attr("fill", rgb);
-					if(sect_count == sect_size - 1)
-						write_count--;
-					sect_count = (sect_count + 1) % sect_size;
-					writing = true;
-				}
+            {
+                startValue: 0,
+                endValue: 360,
+                duration: 60000 / animation_rpm,
+                easing: function (t, b, c, d) {
+                    return c * t / d + b;
+                },
+                onChange: function (angle) {
+                    prev_angle = cur_angle;
+                    cur_angle = angle;
+                    var target_angle = counter * 45;
 
-				disk_platter_inst.setAngle(angle + initial_angle[1]);
-				canvas.renderAll();
-			},
-			onComplete: function ()
-			{
-				if (animation_rpm == rpm)
-				{
-					platterAnimateInter(animation_rpm, write_time, write_count, sect_local, sect_size, sect_color_r, sect_color_g, sect_color_b);
-				}
-			},
+                    if (cur_angle >= target_angle
+                        && target_angle > prev_angle) {
+                        console.log(counter);
+                        counter++;
+                        console.log(writing);
+                        if (writing == true)
+                            write_count++;
+                    }
 
-			abort: function ()
-			{
-				return (animation_rpm != rpm || stop_inter);
-			}
-        });
+                    if (write_count == write_time) {
+                        write_count = 0;
+                        writing = false;
+                    }
+
+
+                    target_angle = (sect_local[sect_count] + 1) * 45;
+
+                    if (cur_angle >= target_angle
+                        && target_angle > prev_angle
+                        && writing == false) {
+                        var rgb = "rgb(" + sect_color_r[sect_count] + ", " + sect_color_g[sect_count] + ", " + sect_color_b[sect_count] + ")";
+                        buffer.attr("fill", rgb);
+                        if (sect_count == sect_size - 1)
+                            write_count--;
+                        sect_count = (sect_count + 1) % sect_size;
+                        writing = true;
+                    }
+
+                    disk_platter_inst.setAngle(angle + initial_angle[1]);
+                    canvas.renderAll();
+                },
+                onComplete: function () {
+                    if (animation_rpm == rpm) {
+                        platterAnimateInter(animation_rpm,
+                                            write_time,
+                                            write_count,
+                                            sect_local,
+                                            sect_size,
+                                            sect_color_r,
+                                            sect_color_g,
+                                            sect_color_b);
+                    }
+                },
+
+                abort: function () {
+                    return (animation_rpm != rpm || stop_inter);
+                }
+            });
     }
 }
 var actuator_velocity = 40;
@@ -913,7 +948,7 @@ function actuatorAnimateTo(track) {
 
 
     if (stop_actuator == false) {
-		actuator_moving = true;
+        actuator_moving = true;
 
         circle_track0.attr("fill", "red");
         circle_track1.attr("fill", "red");
