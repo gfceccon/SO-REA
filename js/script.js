@@ -77,6 +77,16 @@ var credits_text_en = "<p class=\"title\">Credits</p>" +
     "São Carlos - SP, Brasil.<br>" +
     "Second semester of 2015.</p>";
 
+var skew_state_pt = "Estado";
+var skew_state_en = "State";
+var skew_track_pt = "Trilha";
+var skew_track_en = "Track";
+var skew_track0_pt = "Trilha azul";
+var skew_track0_en = "Blue track";
+var skew_track1_pt = "Trilha vermelha";
+var skew_track1_en = "Red track";
+var skew_track2_pt = "Trilha verde";
+var skew_track2_en = "Green track";
 
 /// -- SYSTEM VARIABLES --- ///
 
@@ -359,7 +369,8 @@ function initialize() {
 						break;
 
 					case Section.LLFsk1:
-						stop_inter = false;
+						stop_skew = false;
+						stop_actuator = false;
 						disk_actuator_inst.setAngle(actuator_angles[0]);
 						cur_track = 0;
 						skew = 1;
@@ -374,6 +385,7 @@ function initialize() {
 						break;
 
 					case Section.LLFil1:
+						stop_inter = false;
 						disk_actuator_inst.setAngle(actuator_angles[1]);
 						cur_track = 1;
 						platterAnimateInter(rpm, 1, 0, inter1_local, inter1_size, inter1_color_r, inter1_color_g, inter1_color_b);
@@ -970,6 +982,11 @@ function setLangPt() {
     $("#hlf-button").html(hlf_pt);
     $("#about-button").html(about_pt);
     $("#credits-button").html(credits_pt);
+    $("#th-state").html(skew_state_pt);
+    $("#th-track").html(skew_track_pt);
+    $("#td-track0").html(skew_track0_pt);
+    $("#td-track1").html(skew_track1_pt);
+    $("#td-track1").html(skew_track2_pt);
     rpm_text.html("Velocidade do Disco (RPM): " + rpm);
 
     switch (currentSection) {
@@ -1012,6 +1029,11 @@ function setLangEn() {
     $("#hlf-button").html(hlf_en);
     $("#about-button").html(about_en);
     $("#credits-button").html(credits_en);
+    $("#th-state").html(skew_state_en);
+    $("#th-track").html(skew_track_en);
+    $("#td-track0").html(skew_track0_en);
+    $("#td-track1").html(skew_track1_en);
+    $("#td-track1").html(skew_track2_en);
     rpm_text.html("Disk Rotation Speed (RPM): " + rpm);
 
     switch (currentSection) {
