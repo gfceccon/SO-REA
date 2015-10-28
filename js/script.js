@@ -37,10 +37,14 @@ var about_text_pt = "<p class=\"title\">Sobre</p>" +
     "<p>Esta aplicação foi desenvolvida pensando-se na facilidade de uso. Ao entrar na aplicação, é possível ver um menu lateral, que contém todas as seções da aplicação, bem como as bandeiras de seleção de idioma.</p>" +
     "<p>O primeiro botão é o \"Iniciar\", que simplesmente passa por todas as seções da aplicação de forma linear. Ideal para quem nunca utilizou a aplicação e deseja experimentar tudo o que ela tem a oferecer.</p>" +
     "<p>O segundo botão é o de \"Disco Rígido\". Nesta seção, é possível observar como está internamente organizado o disco rígido, com suas principais partes nomeadas. A figura X mostra uma captura de tela com o estado da aplicação ao entrar nesta seção.<br>" +
-    "<image src=\"images/screenshots/hard_disk_pt.png\" class=\"screenshot\"></image></br>" +
-    "Figura X - Visão da aplicação dentro da seção \"Disco Rígido\".</p>" +
-    "<p>O terceiro botão é o de \"Formatação de Baixo Nível\". INSIRA TEXTO AQUI</p>" +
-    "<p>O quarto botão é o de \"Formatação de Alto Nível\". INSIRA TEXTO AQUI</p>" +
+    "<image src='images/screenshots/hard_disk_pt.png' class='screenshot'></image></br>" +
+    "Figura 1 - Visão da aplicação dentro da seção \"Disco Rígido\".</p>" +
+    "<p>O terceiro botão é o de \"Formatação de Baixo Nível\". Ele possui quatro seções associadas a ele.<br>" +
+    "1 - Cilindro sem Torção: Nesta seção é possível observar como funciona a leitura de setores consecutivos do disco em um cilindro sem torção.<br>" +
+    "2 - Torção de Cilindro: Nesta seção é possível observar como funciona a leitura de setores consecutivos do disco em um cilindro com torção de um setor.<br>" +
+    "3 - Sem Entrelaçamento: Nesta seção é possível observar como acontece a leitura de setores consecutivos em uma trilha, organizados de forma consecutiva fisicamente, quando existe um tempo mínimo para transferir os dados lidos do HD para a memória principal.<br>" +
+    "4 - Com Entrelaçamento: Nesta seção é possível observar como acontece a leitura de setores consecutivos em uma trilha, quando organizados de forma intercalada, e onde existe um tempo mínimo para transferir os dados lidos do HD para a memória principal.<br>" +
+    "<p>O quarto botão é o de \"Formatação de Alto Nível\", cuja seção correspondente consiste de uma breve demonstração interativa de setores de boot sendo instalados num disco, juntamente com as respectivas entradas na tabela de particionamento da MBR.</p>" +
     "<p>O quinto botão entra na seção \"Sobre\", que possui um texto similar a este, explicando como a aplicação está organizada e o que se encontra em cada seção.</p>" +
     "<p>O último botão é o botão de \"Créditos\", no qual pode-se ver quais foram os alunos que desenvolveram a aplicação, e o professor orientador do desenvolvimento.</p>" +
     "<p>Por fim, no canto inferior do menu, estão localizadas as bandeiras de seleção de idiomas. Clicando na bandeira do Brasil, o idioma é alterado para português. Clicando na bandeira dos Estados Unidos, o idioma é alterado para inglês.</p>";
@@ -48,10 +52,14 @@ var about_text_en = "<p class=\"title\">About</p>" +
     "<p>This application was developed with ease of use in our minds. When first entering it, you can see a lateral menu, which contains all the available sections of the application, as well as the language selection flags.</p>" +
     "<p>The first button is \"Begin\", which will simply pass linearly through all sections of the application. Recommended for those who never used the application before, and want to experience everything it has to offer.</p>" +
     "<p>The second button is \"Hard Disk\". Here you can observe how a hard disk is internally organized, with its main components named. Figure X shows a screenshot with the state of the application after entering that section.<br>" +
-    "<image src=\"images/screenshots/hard_disk_en.png\" class=\"screenshot\"></image><br>" +
-    "Figure X - Application state inside \"Hard Disk\" section.</p>" +
-    "<p>The third button is the \"Low Level Formatting\" button.</p>" +
-    "<p>The fourth button is the \"High Level Formatting\" button.</p>" +
+    "<image src='images/screenshots/hard_disk_en.png' class='screenshot'></image><br>" +
+    "Figure 1 - Application state inside \"Hard Disk\" section.</p>" +
+    "<p>The third button is the \"Low Level Formatting\" button. It contains four inner sectinons.<br>" +
+    "1 - Unskewed Cylinder: In this section it's possible to observe how the access to consecutive sectors works, in an unskewed cylinder disk.<br>" +
+    "2 - Skewed Cylinder: In this section it's possible to observe how the access to consecutive sectors works, in a cylinder that is skewed by one sector.<br>" +
+    "3 - No Interleaving: In this section it's possible to observe how the access to consecutive sectors in a single track works, which are organized consequentially on that track, when there is a minimal time to transfer the data from the Hard Disk to the principal memory.<br>" +
+    "4 - Interleaving: In this section it's possible to observe how the access to consecutive sectors in a single track works, which are organized alternatedly on that track, when there is a minimal time to transfer the data from the Hard Disk to the principal memory.<br>" +
+    "<p>The fourth button is the \"High Level Formatting\" button, which section is composed of a brief interactive demonstration of boot sectors being laid out on a disk, along with the entries on the MBR's partition table.</p>" +
     "<p>The fifth button leads you to the \"About\" section, which contains text similar to this one, explaining how the application is organized and what you will find in each of the sections.</p>" +
     "<p>The last button is the \"Credits\" button, where you can see which students developed the application, as well as the supervisioning professor.</p>" +
     "<p>Lastly, on the bottom corner of the menu, the language selection flags are displayed. You can set the application language to portuguese by clicking on the Brazil flag, or set it to english by clicking on the United States flag.</p>";
@@ -750,7 +758,8 @@ function highLevelFormatting() {
             $pa[step].hide().appendTo("#hlf").delay(100).fadeIn("fast");
 
             if (step > 0)
-                $pt[step].hide().appendTo("#p_table").delay(100).fadeIn("fast"); step++;
+                $pt[step].hide().appendTo("#p_table").delay(100).fadeIn("fast");
+            step++;
 
             if (step === 5)
                 $navr.css({"opacity": "0.25", "cursor": "default"});
@@ -766,7 +775,8 @@ function highLevelFormatting() {
             $pa[step - 1].fadeOut("fast");
 
             if ((step - 1) > 0)
-                $pt[step - 1].fadeOut("fast"); step--;
+                $pt[step - 1].fadeOut("fast");
+            step--;
 
             if (step === 0) {
                 $navl.css({"opacity": "0.25", "cursor": "default"});
