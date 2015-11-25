@@ -31,7 +31,7 @@
     font-size: 200%;
 }
 
-#skew-table, #inter-table {
+#skew-table, #inter-table, #skew-table-subtitle {
     border: 1px solid black;
 }
 
@@ -42,6 +42,17 @@
 }
 
 #skew-table td {
+    border: 1px solid black;
+    padding: 0px 5px;
+}
+
+#skew-table-subtitle  th {
+    border: 1px solid black;
+    text-align: center;
+    padding: 0px 5px;
+}
+
+#skew-table-subtitle  td {
     border: 1px solid black;
     padding: 0px 5px;
 }

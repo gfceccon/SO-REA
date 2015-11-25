@@ -96,6 +96,16 @@ var skew_track1_en = "Red track";
 var skew_track2_pt = "Trilha verde";
 var skew_track2_en = "Green track";
 
+var skew_subtitle_state_pt = "Cor";
+var skew_subtitle_state_en = "Color";
+var skew_subtitle_track_pt = "Estado";
+var skew_subtitle_track_en = "State";
+var skew_subtitle_track0_pt = "Esperando outras trilhas";
+var skew_subtitle_track0_en = "Waiting for other tracks";
+var skew_subtitle_track1_pt = "Esperando começo da trilha";
+var skew_subtitle_track1_en = "Waiting for track begining";
+var skew_subtitle_track2_pt = "Lendo trilha";
+var skew_subtitle_track2_en = "Reading track";
 /// -- SYSTEM VARIABLES --- ///
 
 var presentation_mode = false;
@@ -125,6 +135,8 @@ var canvas = false;
 var rpm_slider = false;
 var rpm_text = false;
 var rpm = 16;
+var nav_rpm = [8, 12, 16];
+var nav_rpm_cur = 0;
 
 /// -- INSTANCES VARIABLES --- ///
 var disk_case_inst = false;
@@ -150,6 +162,7 @@ var platter_text_img = false;
 var content;
 var main_text;
 var skew_table;
+var skew_table_subtitle;
 var circle_track0;
 var circle_track1;
 var circle_track2;
@@ -328,6 +341,7 @@ function initialize() {
     content = $("#content");
     main_text = $("#text");
     skew_table = $("#skew-table");
+    skew_table_subtitle = $("#skew-table-subtitle");
     circle_track0 = $("#state0");
     circle_track1 = $("#state1");
     circle_track2 = $("#state2");
@@ -573,8 +587,9 @@ function hardDisk() {
 
     canvas.insertAt(disk_cover_inst, 10, true);
 
-    rpm = 8;
-    rpm_slider.slider("value", 8);
+	nav_rpm_cur = (nav_rpm_cur + 1)%nav_rpm.length;
+    rpm = nav_rpm[nav_rpm_cur];
+    rpm_slider.slider("value", rpm);
     changeRpmText(rpm);
     disk_actuator_inst.setAngle(actuator_angles[0]);
     cur_track = 0;
@@ -591,6 +606,9 @@ function lowLevelFormatting(section) {
     stop_inter = true;
     stop_actuator = true;
 
+	circle_track0.attr("fill", "green");
+	circle_track1.attr("fill", "red");
+	circle_track2.attr("fill", "red");
 
     switch (section) {
         case Section.LLFsk0:
@@ -599,12 +617,15 @@ function lowLevelFormatting(section) {
             rpm_text.show();
             rpm_slider.show();
             skew_table.show();
+			$("#skew-subtitle").show();
+			skew_table_subtitle.show();
 
             stop_skew = false;
             stop_actuator = false;
-            rpm = 8;
-            rpm_slider.slider("value", 8);
-            changeRpmText(rpm);
+			nav_rpm_cur = (nav_rpm_cur + 1)%nav_rpm.length;
+			rpm = nav_rpm[nav_rpm_cur];
+			rpm_slider.slider("value", rpm);
+			changeRpmText(rpm);
             disk_actuator_inst.setAngle(actuator_angles[0]);
             cur_track = 0;
             skew = 0;
@@ -617,12 +638,15 @@ function lowLevelFormatting(section) {
             rpm_text.show();
             rpm_slider.show();
             skew_table.show();
+			$("#skew-subtitle").show();
+			skew_table_subtitle.show();
 
             stop_skew = false;
             stop_actuator = false;
-            rpm = 12;
-            rpm_slider.slider("value", 12);
-            changeRpmText(rpm);
+			nav_rpm_cur = (nav_rpm_cur + 1)%nav_rpm.length;
+			rpm = nav_rpm[nav_rpm_cur];
+			rpm_slider.slider("value", rpm);
+			changeRpmText(rpm);
             disk_actuator_inst.setAngle(actuator_angles[0]);
             cur_track = 0;
             skew = 1;
@@ -637,9 +661,10 @@ function lowLevelFormatting(section) {
             inter_table.show();
 
             stop_inter = false;
-            rpm = 16;
-            rpm_slider.slider("value", 16);
-            changeRpmText(rpm);
+			nav_rpm_cur = (nav_rpm_cur + 1)%nav_rpm.length;
+			rpm = nav_rpm[nav_rpm_cur];
+			rpm_slider.slider("value", rpm);
+			changeRpmText(rpm);
             disk_actuator_inst.setAngle(actuator_angles[1]);
             cur_track = 1;
             sect_count = 0;
@@ -661,9 +686,10 @@ function lowLevelFormatting(section) {
             inter_table.show();
 
             stop_inter = false;
-            rpm = 12;
-            rpm_slider.slider("value", 12);
-            changeRpmText(rpm);
+			nav_rpm_cur = (nav_rpm_cur + 1)%nav_rpm.length;
+			rpm = nav_rpm[nav_rpm_cur];
+			rpm_slider.slider("value", rpm);
+			changeRpmText(rpm);
             disk_actuator_inst.setAngle(actuator_angles[1]);
             cur_track = 1;
             sect_count = 0;
@@ -1047,11 +1073,19 @@ function setLangPt() {
     $("#hlf-button").html(hlf_pt);
     $("#about-button").html(about_pt);
     $("#credits-button").html(credits_pt);
+	
     $("#th-state").html(skew_state_pt);
     $("#th-track").html(skew_track_pt);
     $("#td-track0").html(skew_track0_pt);
     $("#td-track1").html(skew_track1_pt);
     $("#td-track1").html(skew_track2_pt);
+	
+	$("#skew-subtitle").html("Legenda");
+    $("#th-state-subtitle").html(skew_subtitle_state_pt);
+    $("#th-track-subtitle").html(skew_subtitle_track_pt);
+    $("#td-track0-subtitle").html(skew_subtitle_track0_pt);
+    $("#td-track1-subtitle").html(skew_subtitle_track1_pt);
+    $("#td-track1-subtitle").html(skew_subtitle_track2_pt);
     rpm_text.html("Velocidade do Disco (RPM): " + rpm);
 
     switch (currentSection) {
@@ -1094,6 +1128,14 @@ function setLangEn() {
     $("#hlf-button").html(hlf_en);
     $("#about-button").html(about_en);
     $("#credits-button").html(credits_en);
+	
+    $("#th-state-subtitle").html(skew_subtitle_state_en);
+    $("#th-track-subtitle").html(skew_subtitle_track_en);
+    $("#td-track0-subtitle").html(skew_subtitle_track0_en);
+    $("#td-track1-subtitle").html(skew_subtitle_track1_en);
+    $("#td-track1-subtitle").html(skew_subtitle_track2_en);
+	
+	$("#skew-subtitle").html("Subtitle");
     $("#th-state").html(skew_state_en);
     $("#th-track").html(skew_track_en);
     $("#td-track0").html(skew_track0_en);
@@ -1136,6 +1178,8 @@ function hideAll() {
     rpm_text.hide();
     rpm_slider.hide();
     skew_table.hide();
+	$("#skew-subtitle").hide();
+	skew_table_subtitle.hide();
     inter_table.hide();
     main_text.html("");
 
