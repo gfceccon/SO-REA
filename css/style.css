@@ -100,12 +100,12 @@
     border-bottom: 2px solid whitesmoke;
     text-align: center;
     font-weight: bold;
-    padding: 7px;
+    padding: 4px;
 }
 
 #p_table td {
     text-align: center;
-    padding: 7px;
+    padding: 4px;
 }
 
 .p_action_button {

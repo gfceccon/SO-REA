@@ -723,8 +723,11 @@ function highLevelFormatting() {
 
     var $ptable = $("<table id='p_table'></table>");
     var $pt = new Array();
-    $pt[0] = $("<tr><th colspan='4'>Partition Table</th></tr>" +
-               "<tr><th>Starting Node</th><th>Size</th><th>Boot Flag</th><th>File System</th></tr>");
+    $pt[0] = $("<tr><th colspan='4'><p data-i18n='ptable_head'></p></th></tr>" +
+               "<tr><th><p data-i18n='ptable_col1'></p></th>" +
+			   "<th><p data-i18n='ptable_col2'></p></th>" +
+			   "<th><p data-i18n='ptable_col3'></p></th>" +
+			   "<th><p data-i18n='ptable_col4'></p></th></tr>");
     $pt[1] = $("<tr><td>1</td><td>6</td><td>1</td><td>ext4</td></tr>");
     $pt[2] = $("<tr><td>7</td><td>7</td><td>0</td><td>FAT-32</td></tr>");
     $pt[3] = $("<tr><td>14</td><td>6</td><td>0</td><td>ReiserFS</td></tr>");
@@ -810,6 +813,8 @@ function highLevelFormatting() {
             }
         }
     });
+
+	i18n_refresh();
 }
 
 var reading = true;
@@ -1111,6 +1116,8 @@ function setLangPt() {
         default:
             break;
     }
+
+	i18n_change("pt");
 }
 
 function setLangEn() {
@@ -1166,6 +1173,8 @@ function setLangEn() {
         default:
             break;
     }
+
+	i18n_change("en");
 }
 
 function hideAll() {
@@ -1187,3 +1196,26 @@ function hideAll() {
     stop_inter = true;
     stop_actuator = true;
 }
+
+function i18n_refresh() {
+
+	$("[data-i18n]").each(function () {
+		var prop = $(this).data('i18n');
+		$(this).text($.i18n.prop(prop))
+	});
+}
+
+function i18n_change(lang) {
+
+	$.i18n.properties({
+		path    : 'text/',
+		mode    : 'both',
+		language: lang,
+		callback: i18n_refresh
+	});
+}
+
+$(document).ready(function() {
+
+	i18n_change("pt");
+});
